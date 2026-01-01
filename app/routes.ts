@@ -1,11 +1,17 @@
 /**
  * Application Routes Configuration
- * 
+ * 애플리케이션 라우트 설정
+ *
  * This file defines all routes for the application using React Router's
  * file-based routing system. Routes are organized by feature and access level.
- * 
+ * 이 파일은 React Router의 파일 기반 라우팅 시스템을 사용하여 애플리케이션의 모든 라우트를 정의합니다.
+ * 라우트는 기능 및 액세스 수준에 따라 구성됩니다.
+ *
  * The structure uses layouts for shared UI elements and prefixes for route grouping.
+ * 이 구조는 공유 UI 요소를 위한 레이아웃과 라우트 그룹화를 위한 접두사(prefixes)를 사용합니다.
+ *
  * This approach creates a hierarchical routing system that's both maintainable and scalable.
+ * 이 방식은 유지보수가 용이하고 확장이 가능한 계층적 라우팅 시스템을 제공합니다.
  */
 import {
   type RouteConfig,
@@ -20,10 +26,12 @@ export default [
   route("/sitemap.xml", "core/screens/sitemap.ts"),
   ...prefix("/debug", [
     // You should delete this in production.
+    // 프로덕션 환경에서는 이 부분을 삭제해야 합니다.
     route("/sentry", "debug/sentry.tsx"),
     route("/analytics", "debug/analytics.tsx"),
   ]),
   // API Routes. Routes that export actions and loaders but no UI.
+  // API 라우트. 액션과 로더를 내보내지만 UI는 없는 라우트입니다.
   ...prefix("/api", [
     ...prefix("/settings", [
       route("/theme", "features/settings/api/set-theme.tsx"),
@@ -50,6 +58,7 @@ export default [
     route("/error", "core/screens/error.tsx"),
     layout("core/layouts/public.layout.tsx", [
       // Routes that should only be visible to unauthenticated users.
+      // 인증되지 않은 사용자에게만 표시되어야 하는 라우트입니다.
       route("/login", "features/auth/screens/login.tsx"),
       route("/join", "features/auth/screens/join.tsx"),
       ...prefix("/auth", [
@@ -81,6 +90,7 @@ export default [
         route("/email-verified", "features/auth/screens/email-verified.tsx"),
       ]),
       // Routes that should only be visible to authenticated users.
+      // 인증된 사용자에게만 표시되어야 하는 라우트입니다.
       route("/logout", "features/auth/screens/logout.tsx"),
     ]),
     route("/contact", "features/contact/screens/contact-us.tsx"),
