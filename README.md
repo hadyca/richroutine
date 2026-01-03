@@ -11,5 +11,3 @@ For detailed documentation and setup instructions, visit [supaplate.com/docs](ht
 ## License
 
 See [LICENSE.md](./LICENSE.md) for details.
-
-영재와 커피마심
