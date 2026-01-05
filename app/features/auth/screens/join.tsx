@@ -65,6 +65,18 @@ export const meta: Route.MetaFunction = () => {
  * - Terms: Boolean for terms acceptance
  *
  * The schema includes a custom refinement to ensure passwords match
+ *
+ * 사용자 등록을 위한 폼 유효성 검사 스키마
+ *
+ * Zod를 사용하여 다음을 검증합니다:
+ * - 이름: 필수 입력 필드
+ * - 이메일: 유효한 이메일 형식이어야 함
+ * - 비밀번호: 최소 8자 이상이어야 함
+ * - 비밀번호 확인: 비밀번호 필드와 일치해야 함
+ * - 마케팅: 마케팅 수신 동의 여부 (기본값: false)
+ * - 약관: 약관 동의 여부
+ *
+ * 이 스키마는 비밀번호 일치 여부를 확인하는 사용자 정의 검증을 포함합니다.
  */
 const joinSchema = z
   .object({
