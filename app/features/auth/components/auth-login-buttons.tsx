@@ -17,9 +17,6 @@ import { LockIcon, MailIcon, PhoneIcon } from "lucide-react";
 import { Link } from "react-router";
 
 import { Button } from "~/core/components/ui/button";
-
-import { AppleLogo } from "./logos/apple";
-import { GithubLogo } from "./logos/github";
 import { GoogleLogo } from "./logos/google";
 import { KakaoLogo } from "./logos/kakao";
 
@@ -35,6 +32,7 @@ import { KakaoLogo } from "./logos/kakao";
  * @param label - Provider name (e.g., "Google", "Apple")
  * @param href - URL path to the authentication flow for this provider
  */
+
 function AuthLoginButton({
   logo,
   label,
@@ -125,16 +123,6 @@ function SocialLoginButtons() {
         logo={<GoogleLogo className="size-4" />}
         label="Google"
         href="/auth/social/start/google"
-      />
-      <AuthLoginButton
-        logo={<GithubLogo className="size-4 scale-125 dark:text-white" />}
-        label="Github"
-        href="/auth/social/start/github"
-      />
-      <AuthLoginButton
-        logo={<AppleLogo className="size-4 scale-150 dark:text-white" />}
-        label="Apple"
-        href="/auth/social/start/apple"
       />
       <AuthLoginButton
         logo={<KakaoLogo className="size-4 scale-125 dark:text-yellow-300" />}

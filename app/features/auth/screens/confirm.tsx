@@ -41,6 +41,7 @@ export const meta: Route.MetaFunction = () => {
  * - type: The type of confirmation (email verification, password recovery, or email change)
  * - next: The URL to redirect to after successful confirmation (defaults to home page)
  */
+
 const searchParamsSchema = z.object({
   token_hash: z.string(),
   type: z.enum(["email", "recovery", "email_change"]),

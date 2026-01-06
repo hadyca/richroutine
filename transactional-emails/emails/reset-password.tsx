@@ -28,7 +28,7 @@ export default function ResetPassword() {
               </Text>
               <Button
                 className="block rounded-xl bg-black px-6 py-3 text-center text-[15px] font-semibold text-white no-underline"
-                href={`{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/auth/forgot-password/create`}
+                href={`http://localhost:5173/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/auth/forgot-password/create`}
               >
                 Reset Password
               </Button>
@@ -39,7 +39,7 @@ export default function ResetPassword() {
                 URL below into your browser:
               </Text>
               <Text className="mb-4 text-[15px] leading-relaxed text-blue-500">
-                {`{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/auth/forgot-password/create`}
+                {`http://localhost:5173/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/auth/forgot-password/create`}
               </Text>
               <Text className="mb-4 text-[15px] leading-relaxed text-black">
                 If you did not request a password reset, you can safely ignore
@@ -49,7 +49,7 @@ export default function ResetPassword() {
                 Best regards,
               </Text>
               <Text className="mb-4 text-[15px] leading-relaxed text-black">
-                The Supaplate Team
+                The Richroutine Team
               </Text>
             </Section>
           </Container>
