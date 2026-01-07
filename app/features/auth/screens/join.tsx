@@ -28,7 +28,6 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "~/core/components/ui/card";
@@ -71,30 +70,15 @@ export const meta: Route.MetaFunction = () => {
  * Zod를 사용하여 다음을 검증합니다:
  * - 이름: 필수 입력 필드
  * - 이메일: 유효한 이메일 형식이어야 함
- * - 비밀번호: 최소 8자 이상이어야 함
- * - 비밀번호 확인: 비밀번호 필드와 일치해야 함
  * - 마케팅: 마케팅 수신 동의 여부 (기본값: false)
  * - 약관: 약관 동의 여부
- *
- * 이 스키마는 비밀번호 일치 여부를 확인하는 사용자 정의 검증을 포함합니다.
  */
-const joinSchema = z
-  .object({
-    name: z.string().min(1, { message: "Name is required" }),
-    email: z.string().email({ message: "Invalid email address" }),
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long" }),
-    confirmPassword: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long" }),
-    marketing: z.coerce.boolean().default(false),
-    terms: z.coerce.boolean(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match",
-    path: ["confirmPassword"],
-  });
+const joinSchema = z.object({
+  name: z.string().min(1, { message: "이름을 입력해주세요." }),
+  email: z.string().email({ message: "유효한 이메일 주소를 입력해주세요." }),
+  marketing: z.coerce.boolean().default(true),
+  terms: z.coerce.boolean(),
+});
 
 /**
  * Server action for handling user registration form submission
@@ -128,7 +112,7 @@ export async function action({ request }: Route.ActionArgs) {
   // Verify terms of service acceptance
   if (!validData.terms) {
     return data(
-      { error: "You must agree to the terms of service" },
+      { error: "이용약관 및 개인정보 수집에 동의해야 합니다." },
       { status: 400 },
     );
   }
@@ -137,16 +121,13 @@ export async function action({ request }: Route.ActionArgs) {
   const userExists = await doesUserExist(validData.email);
 
   if (userExists) {
-    return data(
-      { error: "There is an account with this email already." },
-      { status: 400 },
-    );
+    return data({ error: "이미 가입된 이메일 주소입니다." }, { status: 400 });
   }
 
-  // Create Supabase client and attempt to sign up the user
+  // Create Supabase client and attempt to sign in with OTP (Magic Link)
   const [client] = makeServerClient(request);
-  const { error: signInError } = await client.auth.signUp({
-    ...validData,
+  const { error: signInError } = await client.auth.signInWithOtp({
+    email: validData.email,
     options: {
       // Store additional user metadata in Supabase auth
       data: {
@@ -157,9 +138,11 @@ export async function action({ request }: Route.ActionArgs) {
     },
   });
 
-  // Return error if user creation fails
   if (signInError) {
-    return data({ error: signInError.message }, { status: 400 });
+    return data(
+      { error: "인증 메일 발송 중 오류가 발생했습니다. 다시 시도해주세요." },
+      { status: 400 },
+    );
   }
 
   // Return success response
@@ -186,7 +169,7 @@ export async function action({ request }: Route.ActionArgs) {
 export default function Join({ actionData }: Route.ComponentProps) {
   // Reference to the form element for resetting after successful submission
   const formRef = useRef<HTMLFormElement>(null);
-  
+
   // Reset the form when registration is successful
   useEffect(() => {
     if (actionData && "success" in actionData && actionData.success) {
@@ -195,15 +178,12 @@ export default function Join({ actionData }: Route.ComponentProps) {
     }
   }, [actionData]);
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div className="flex flex-col items-center justify-center gap-3">
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-col items-center">
           <CardTitle className="text-2xl font-semibold" role="heading">
-            Create an account
+            회원가입
           </CardTitle>
-          <CardDescription className="text-base">
-            Enter your details to create an account
-          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <Form
@@ -213,14 +193,14 @@ export default function Join({ actionData }: Route.ComponentProps) {
           >
             <div className="flex flex-col items-start space-y-2">
               <Label htmlFor="name" className="flex flex-col items-start gap-1">
-                Name
+                이름
               </Label>
               <Input
                 id="name"
                 name="name"
                 required
                 type="text"
-                placeholder="Nico"
+                placeholder="홍길동"
               />
               {actionData &&
               "fieldErrors" in actionData &&
@@ -233,14 +213,14 @@ export default function Join({ actionData }: Route.ComponentProps) {
                 htmlFor="email"
                 className="flex flex-col items-start gap-1"
               >
-                Email
+                이메일
               </Label>
               <Input
                 id="email"
                 name="email"
                 required
                 type="email"
-                placeholder="nico@supaplate.com"
+                placeholder="example@email.com"
               />
               {actionData &&
               "fieldErrors" in actionData &&
@@ -248,80 +228,38 @@ export default function Join({ actionData }: Route.ComponentProps) {
                 <FormErrors errors={actionData.fieldErrors.email} />
               ) : null}
             </div>
-            <div className="flex flex-col items-start space-y-2">
-              <Label
-                htmlFor="password"
-                className="flex flex-col items-start gap-1"
-              >
-                Password
-                <small className="text-muted-foreground">
-                  Must be at least 8 characters.
-                </small>
-              </Label>
-              <Input
-                id="password"
-                name="password"
-                required
-                type="password"
-                placeholder="Enter your password"
-              />
-              {actionData &&
-              "fieldErrors" in actionData &&
-              actionData.fieldErrors?.password ? (
-                <FormErrors errors={actionData.fieldErrors.password} />
-              ) : null}
-            </div>
-            <div className="flex flex-col items-start space-y-2">
-              <Label
-                htmlFor="confirmPassword"
-                className="flex flex-col items-start gap-1"
-              >
-                Confirm password
-              </Label>
-              <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                required
-                type="password"
-                placeholder="Confirm your password"
-              />
-              {actionData &&
-              "fieldErrors" in actionData &&
-              actionData.fieldErrors?.confirmPassword ? (
-                <FormErrors errors={actionData.fieldErrors.confirmPassword} />
-              ) : null}
-            </div>
-            <FormButton label="Create account" className="w-full" />
+
+            <FormButton label="이메일 회원가입" className="w-full" />
             {actionData && "error" in actionData && actionData.error ? (
               <FormErrors errors={[actionData.error]} />
             ) : null}
 
             <div className="flex items-center gap-2">
-              <Checkbox id="marketing" name="marketing" />
+              <Checkbox id="marketing" name="marketing" defaultChecked />
               <Label htmlFor="marketing" className="text-muted-foreground">
-                Sign up for marketing emails
+                마케팅 정보 수신 동의 (선택)
               </Label>
             </div>
             <div className="flex items-center gap-2">
               <Checkbox id="terms" name="terms" checked />
               <Label htmlFor="terms" className="text-muted-foreground">
                 <span>
-                  I have read and agree to the{" "}
-                  <Link
-                    to="/legal/terms-of-service"
-                    viewTransition
-                    className="text-muted-foreground text-underline hover:text-foreground underline transition-colors"
-                  >
-                    Terms of Service
-                  </Link>{" "}
-                  and{" "}
                   <Link
                     to="/legal/privacy-policy"
                     viewTransition
+                    className="text-muted-foreground text-underline hover:text-foreground underline transition-colors"
+                  >
+                    개인정보 수집
+                  </Link>{" "}
+                  및{" "}
+                  <Link
+                    to="/legal/terms-of-service"
+                    viewTransition
                     className="text-muted-foreground hover:text-foreground text-underline underline transition-colors"
                   >
-                    Privacy Policy
+                    이용약관{" "}
                   </Link>
+                  동의
                 </span>
               </Label>
             </div>
@@ -331,10 +269,10 @@ export default function Join({ actionData }: Route.ComponentProps) {
                   className="size-4"
                   color="oklch(0.627 0.194 149.214)"
                 />
-                <AlertTitle>Account created!</AlertTitle>
+                <AlertTitle>인증 메일이 발송되었습니다!</AlertTitle>
                 <AlertDescription className="text-green-700 dark:text-green-600">
-                  Before you can sign in, please verify your email. You can
-                  close this tab.
+                  이메일을 확인하여 로그인 링크를 클릭해주세요. 인증이 완료되면
+                  자동으로 서비스에 접속됩니다.
                 </AlertDescription>
               </Alert>
             ) : null}
