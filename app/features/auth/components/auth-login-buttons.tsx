@@ -50,7 +50,7 @@ function AuthLoginButton({
     >
       <Link to={href}>
         <span>{logo}</span>
-        <span>Continue with {label}</span>
+        <span>{label} 회원가입</span>
       </Link>
     </Button>
   );
@@ -86,22 +86,22 @@ function Divider() {
  * Note: The underscore prefix (_SignInButtons) indicates this is a private component
  * intended for internal use within this module.
  */
-function _SignInButtons() {
-  return (
-    <>
-      <AuthLoginButton
-        logo={<LockIcon className="size-4 scale-110 dark:text-white" />}
-        label="OTP"
-        href="/auth/otp/start"
-      />
-      <AuthLoginButton
-        logo={<MailIcon className="size-4 scale-110 dark:text-white" />}
-        label="Magic Link"
-        href="/auth/magic-link"
-      />
-    </>
-  );
-}
+// function _SignInButtons() {
+//   return (
+//     <>
+//       <AuthLoginButton
+//         logo={<LockIcon className="size-4 scale-110 dark:text-white" />}
+//         label="OTP"
+//         href="/auth/otp/start"
+//       />
+//       <AuthLoginButton
+//         logo={<MailIcon className="size-4 scale-110 dark:text-white" />}
+//         label="Magic Link"
+//         href="/auth/magic-link"
+//       />
+//     </>
+//   );
+// }
 
 /**
  * Social login authentication options
@@ -144,7 +144,6 @@ export function SignInButtons() {
     <>
       <Divider />
       <SocialLoginButtons />
-      <_SignInButtons />
     </>
   );
 }

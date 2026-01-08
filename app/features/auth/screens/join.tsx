@@ -282,14 +282,14 @@ export default function Join({ actionData }: Route.ComponentProps) {
       </Card>
       <div className="flex flex-col items-center justify-center text-sm">
         <p className="text-muted-foreground">
-          Already have an account?{" "}
+          이미 계정이 있으신가요?{" "}
           <Link
             to="/login"
             viewTransition
             data-testid="form-signin-link"
             className="text-muted-foreground hover:text-foreground text-underline underline transition-colors"
           >
-            Sign in
+            로그인
           </Link>
         </p>
       </div>

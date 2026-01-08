@@ -8,8 +8,8 @@
  */
 import type { Route } from "./+types/login";
 
-import { AlertCircle, Loader2Icon } from "lucide-react";
-import { useRef } from "react";
+import { AlertCircle, CheckCircle2Icon, Loader2Icon } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { Form, Link, data, redirect, useFetcher } from "react-router";
 import { z } from "zod";
 
@@ -52,15 +52,11 @@ export const meta: Route.MetaFunction = () => {
  *
  * Uses Zod to validate:
  * - Email: Must be a valid email format
- * - Password: Must be at least 8 characters long
  *
  * Error messages are provided for user feedback
  */
 const loginSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters long" }),
+  email: z.string().email({ message: "유효한 이메일 주소를 입력해주세요." }),
 });
 
 /**
@@ -95,17 +91,17 @@ export async function action({ request }: Route.ActionArgs) {
   const [client, headers] = makeServerClient(request);
 
   // Attempt to sign in with email and password
-  const { error: signInError } = await client.auth.signInWithPassword({
-    ...validData,
+  const { error: signInError } = await client.auth.signInWithOtp({
+    email: validData.email,
   });
 
   // Return error if authentication fails
   if (signInError) {
     return data({ error: signInError.message }, { status: 400 });
   }
-
-  // Redirect to home page with authentication cookies in headers
-  return redirect("/", { headers });
+  return {
+    success: true,
+  };
 }
 
 /**
@@ -126,6 +122,13 @@ export default function Login({ actionData }: Route.ComponentProps) {
   // Reference to the form element for accessing form data
   const formRef = useRef<HTMLFormElement>(null);
 
+  useEffect(() => {
+    if (actionData && "success" in actionData && actionData.success) {
+      formRef.current?.reset();
+      formRef.current?.blur();
+    }
+  }, [actionData]);
+
   // Fetcher for submitting the email verification resend request
   const fetcher = useFetcher();
 
@@ -142,7 +145,6 @@ export default function Login({ actionData }: Route.ComponentProps) {
     event.preventDefault();
     if (!formRef.current) return;
     const formData = new FormData(formRef.current);
-    formData.delete("password"); // Only need the email for resending verification
     fetcher.submit(formData, {
       method: "post",
       action: "/auth/api/resend",
@@ -177,43 +179,12 @@ export default function Login({ actionData }: Route.ComponentProps) {
                 name="email"
                 required
                 type="email"
-                placeholder="i.e nico@supaplate.com"
+                placeholder="example@email.com"
               />
               {actionData &&
               "fieldErrors" in actionData &&
               actionData.fieldErrors.email ? (
                 <FormErrors errors={actionData.fieldErrors.email} />
-              ) : null}
-            </div>
-            <div className="flex flex-col items-start space-y-2">
-              <div className="flex w-full items-center justify-between">
-                <Label
-                  htmlFor="password"
-                  className="flex flex-col items-start gap-1"
-                >
-                  Password
-                </Label>
-                <Link
-                  to="/auth/forgot-password/reset"
-                  className="text-muted-foreground text-underline hover:text-foreground self-end text-sm underline transition-colors"
-                  tabIndex={-1}
-                  viewTransition
-                >
-                  Forgot your password?
-                </Link>
-              </div>
-              <Input
-                id="password"
-                name="password"
-                required
-                type="password"
-                placeholder="Enter your password"
-              />
-
-              {actionData &&
-              "fieldErrors" in actionData &&
-              actionData.fieldErrors.password ? (
-                <FormErrors errors={actionData.fieldErrors.password} />
               ) : null}
             </div>
             <FormButton label="Log in" className="w-full" />
@@ -242,6 +213,19 @@ export default function Login({ actionData }: Route.ComponentProps) {
               ) : (
                 <FormErrors errors={[actionData.error]} />
               )
+            ) : null}
+            {actionData && "success" in actionData && actionData.success ? (
+              <Alert className="bg-green-600/20 text-green-700 dark:bg-green-950/20 dark:text-green-600">
+                <CheckCircle2Icon
+                  className="size-4"
+                  color="oklch(0.627 0.194 149.214)"
+                />
+                <AlertTitle>로그인 메일이 발송되었습니다!</AlertTitle>
+                <AlertDescription className="text-green-700 dark:text-green-600">
+                  이메일을 확인하여 로그인 링크를 클릭해주세요. 인증이 완료되면
+                  자동으로 서비스에 접속됩니다.
+                </AlertDescription>
+              </Alert>
             ) : null}
           </Form>
           <SignInButtons />
