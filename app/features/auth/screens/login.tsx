@@ -10,7 +10,7 @@ import type { Route } from "./+types/login";
 
 import { AlertCircle, CheckCircle2Icon, Loader2Icon } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { Form, Link, data, redirect, useFetcher } from "react-router";
+import { Form, Link, data, useFetcher } from "react-router";
 import { z } from "zod";
 
 import FormButton from "~/core/components/form-button";
@@ -23,7 +23,6 @@ import { Button } from "~/core/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "~/core/components/ui/card";
@@ -154,12 +153,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
     <div className="flex flex-col items-center justify-center gap-4">
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-col items-center">
-          <CardTitle className="text-2xl font-semibold">
-            Sign into your account
-          </CardTitle>
-          <CardDescription className="text-base">
-            Please enter your details
-          </CardDescription>
+          <CardTitle className="text-2xl font-semibold">로그인</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <Form
@@ -172,7 +166,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
                 htmlFor="email"
                 className="flex flex-col items-start gap-1"
               >
-                Email
+                이메일
               </Label>
               <Input
                 id="email"
@@ -194,13 +188,13 @@ export default function Login({ actionData }: Route.ComponentProps) {
                   <AlertCircle className="h-4 w-4" />
                   <AlertTitle>Email not confirmed</AlertTitle>
                   <AlertDescription className="flex flex-col items-start gap-2">
-                    Before signing in, please verify your email.
+                    로그인하기 전에 이메일을 인증해 주세요.
                     <Button
                       variant="outline"
                       className="text-foreground flex items-center justify-between gap-2"
                       onClick={onResendClick}
                     >
-                      Resend confirmation email
+                      확인 이메일 재발송
                       {fetcher.state === "submitting" ? (
                         <Loader2Icon
                           data-testid="resend-confirmation-email-spinner"
@@ -233,14 +227,14 @@ export default function Login({ actionData }: Route.ComponentProps) {
       </Card>
       <div className="flex flex-col items-center justify-center text-sm">
         <p className="text-muted-foreground">
-          Don't have an account?{" "}
+          계정이 없으신가요?{" "}
           <Link
             to="/join"
             viewTransition
             data-testid="form-signup-link"
             className="text-muted-foreground hover:text-foreground text-underline underline transition-colors"
           >
-            Sign up
+            회원가입
           </Link>
         </p>
       </div>

@@ -93,6 +93,7 @@ export default [
       // 인증된 사용자에게만 표시되어야 하는 라우트입니다.
       route("/logout", "features/auth/screens/logout.tsx"),
     ]),
+
     route("/contact", "features/contact/screens/contact-us.tsx"),
     ...prefix("/payments", [
       route("/checkout", "features/payments/screens/checkout.tsx"),
