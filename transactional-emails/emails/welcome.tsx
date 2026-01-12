@@ -11,6 +11,7 @@ import {
 } from "@react-email/components";
 
 export default function Welcome({ profile }: { profile: string }) {
+  console.log("리센드 함수작동");
   return (
     <Tailwind>
       <Html>
@@ -19,12 +20,12 @@ export default function Welcome({ profile }: { profile: string }) {
           <Preview>Welcome to Supaplate</Preview>
           <Container className="mx-auto max-w-[560px] py-5 pb-12">
             <Heading className="pt-4 text-center text-2xl leading-tight font-normal tracking-[-0.5px] text-black">
-              Welcome to Supaplate
+              Welcome to Richroutine
             </Heading>
             <Section>
               <Text className="mb-4 text-[15px] leading-relaxed text-black">
                 This is an automated email sent to all users who have signed up
-                to Supaplate.
+                to Richroutine.
               </Text>
               <Text className="mb-4 text-[15px] leading-relaxed text-black">
                 To send this email we used Supabase Queues, Supabase CRON Jobs
