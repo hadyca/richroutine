@@ -9,8 +9,9 @@
 import type { Route } from "./+types/login";
 
 import { AlertCircle, CheckCircle2Icon, Loader2Icon } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Form, Link, data, useFetcher } from "react-router";
+import Turnstile, { useTurnstile } from "react-turnstile";
 import { z } from "zod";
 
 import FormButton from "~/core/components/form-button";
@@ -29,6 +30,7 @@ import {
 import { Input } from "~/core/components/ui/input";
 import { Label } from "~/core/components/ui/label";
 import makeServerClient from "~/core/lib/supa-client.server";
+import { isTurnstileTokenValid } from "~/core/lib/turnstile.server";
 
 import FormErrors from "../../../core/components/form-error";
 import { SignInButtons } from "../components/auth-login-buttons";
@@ -56,6 +58,7 @@ export const meta: Route.MetaFunction = () => {
  */
 const loginSchema = z.object({
   email: z.string().email({ message: "유효한 이메일 주소를 입력해주세요." }),
+  turnstile: z.string().min(1),
 });
 
 /**
@@ -86,8 +89,24 @@ export async function action({ request }: Route.ActionArgs) {
     return data({ fieldErrors: error.flatten().fieldErrors }, { status: 400 });
   }
 
+  const validTurnstile = await isTurnstileTokenValid(validData.turnstile);
+
+  if (!validTurnstile) {
+    return data(
+      {
+        errors: {
+          turnstile: !validTurnstile
+            ? ["캡차가 유효하지 않습니다. 다시 시도해 주세요."]
+            : [],
+        },
+        success: false,
+      },
+      { status: 400 },
+    );
+  }
+
   // Create Supabase client with request cookies for authentication
-  const [client, headers] = makeServerClient(request);
+  const [client] = makeServerClient(request);
 
   // Attempt to sign in with email and password
   const { error: signInError } = await client.auth.signInWithOtp({
@@ -118,13 +137,29 @@ export async function action({ request }: Route.ActionArgs) {
  * @param actionData - Data returned from the form action, including any errors
  */
 export default function Login({ actionData }: Route.ComponentProps) {
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [renderCaptchas, setRenderCaptchas] = useState<boolean>(false);
+  const turnstile = useTurnstile(); // Hook for Turnstile widget interactions
+
   // Reference to the form element for accessing form data
   const formRef = useRef<HTMLFormElement>(null);
 
+  // Handle form submission results: reset captcha, reset form on success, or show captcha on error
   useEffect(() => {
-    if (actionData && "success" in actionData && actionData.success) {
+    if (!actionData) return;
+
+    // Reset Turnstile token as it can only be used once
+    turnstile.reset();
+    setTurnstileToken("");
+
+    // Handle successful login
+    if ("success" in actionData && actionData.success) {
       formRef.current?.reset();
       formRef.current?.blur();
+    }
+    // Ensure CAPTCHA is visible if there are validation errors
+    else if ("fieldErrors" in actionData || "errors" in actionData) {
+      setRenderCaptchas(true);
     }
   }, [actionData]);
 
@@ -160,6 +195,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
             className="flex w-full flex-col gap-5"
             method="post"
             ref={formRef}
+            onChange={() => !renderCaptchas && setRenderCaptchas(true)}
           >
             <div className="flex flex-col items-start space-y-2">
               <Label
@@ -181,7 +217,42 @@ export default function Login({ actionData }: Route.ComponentProps) {
                 <FormErrors errors={actionData.fieldErrors.email} />
               ) : null}
             </div>
-            <FormButton label="Log in" className="w-full" />
+
+            <input
+              type="hidden"
+              name="turnstile"
+              value={turnstileToken}
+              required
+            />
+
+            {/* CAPTCHA widgets - only rendered when user interacts with form or there are errors */}
+            {renderCaptchas ? (
+              <div className="flex w-full justify-center">
+                <div className="flex flex-col items-center">
+                  <Turnstile
+                    sitekey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+                    onVerify={(token) => {
+                      setTurnstileToken(token);
+                    }}
+                  />
+                  {actionData &&
+                  "errors" in actionData &&
+                  actionData.errors?.turnstile ? (
+                    <FormErrors
+                      key="turnstile"
+                      errors={actionData.errors.turnstile}
+                    />
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+
+            <FormButton
+              label="Log in"
+              className="w-full"
+              disabled={!turnstileToken}
+            />
+            {/* ... error messages ... */}
             {actionData && "error" in actionData ? (
               actionData.error === "Email not confirmed" ? (
                 <Alert variant="destructive" className="bg-destructive/10">

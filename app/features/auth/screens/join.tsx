@@ -14,8 +14,9 @@
 import type { Route } from "./+types/join";
 
 import { CheckCircle2Icon } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Form, Link, data } from "react-router";
+import Turnstile, { useTurnstile } from "react-turnstile";
 import { z } from "zod";
 
 import FormButton from "~/core/components/form-button";
@@ -35,6 +36,7 @@ import { Checkbox } from "~/core/components/ui/checkbox";
 import { Input } from "~/core/components/ui/input";
 import { Label } from "~/core/components/ui/label";
 import makeServerClient from "~/core/lib/supa-client.server";
+import { isTurnstileTokenValid } from "~/core/lib/turnstile.server";
 
 import { SignUpButtons } from "../components/auth-login-buttons";
 import { doesUserExist } from "../lib/queries.server";
@@ -78,6 +80,7 @@ const joinSchema = z.object({
   email: z.string().email({ message: "유효한 이메일 주소를 입력해주세요." }),
   marketing: z.coerce.boolean().default(true),
   terms: z.coerce.boolean(),
+  turnstile: z.string().min(1),
 });
 
 /**
@@ -107,6 +110,24 @@ export async function action({ request }: Route.ActionArgs) {
   // Return validation errors if form data is invalid
   if (!success) {
     return data({ fieldErrors: error.flatten().fieldErrors }, { status: 400 });
+  }
+
+  // Verify Turnstile token
+  const validTurnstile = await isTurnstileTokenValid(validData.turnstile);
+
+  // Return error if Turnstile verification fails
+  if (!validTurnstile) {
+    return data(
+      {
+        errors: {
+          turnstile: !validTurnstile
+            ? ["캡차가 유효하지 않습니다. 다시 시도해 주세요."]
+            : [],
+        },
+        success: false,
+      },
+      { status: 400 },
+    );
   }
 
   // Verify terms of service acceptance
@@ -167,16 +188,35 @@ export async function action({ request }: Route.ActionArgs) {
  * @param actionData - Data returned from the form action, including errors or success status
  */
 export default function Join({ actionData }: Route.ComponentProps) {
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+
+  // State to control when to render CAPTCHA widgets (prevents SSR issues)
+  const [renderCaptchas, setRenderCaptchas] = useState<boolean>(false);
+
+  const turnstile = useTurnstile(); // Hook for Turnstile widget interactions
+
   // Reference to the form element for resetting after successful submission
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Reset the form when registration is successful
+  // Handle form submission results: reset captcha, reset form on success, or show captcha on error
   useEffect(() => {
-    if (actionData && "success" in actionData && actionData.success) {
+    if (!actionData) return;
+
+    // Reset Turnstile token as it can only be used once
+    turnstile.reset();
+    setTurnstileToken("");
+
+    // Handle successful registration
+    if ("success" in actionData && actionData.success) {
       formRef.current?.reset();
       formRef.current?.blur();
     }
+    // Ensure CAPTCHA is visible if there are validation errors
+    else if ("fieldErrors" in actionData || "errors" in actionData) {
+      setRenderCaptchas(true);
+    }
   }, [actionData]);
+
   return (
     <div className="flex flex-col items-center justify-center gap-3">
       <Card className="w-full max-w-md">
@@ -190,6 +230,7 @@ export default function Join({ actionData }: Route.ComponentProps) {
             className="flex w-full flex-col gap-5"
             method="post"
             ref={formRef}
+            onChange={() => !renderCaptchas && setRenderCaptchas(true)}
           >
             <div className="flex flex-col items-start space-y-2">
               <Label htmlFor="name" className="flex flex-col items-start gap-1">
@@ -229,7 +270,11 @@ export default function Join({ actionData }: Route.ComponentProps) {
               ) : null}
             </div>
 
-            <FormButton label="이메일 회원가입" className="w-full" />
+            <FormButton
+              label="이메일 회원가입"
+              className="w-full"
+              disabled={!turnstileToken}
+            />
             {actionData && "error" in actionData && actionData.error ? (
               <FormErrors errors={[actionData.error]} />
             ) : null}
@@ -275,6 +320,35 @@ export default function Join({ actionData }: Route.ComponentProps) {
                   자동으로 서비스에 접속됩니다.
                 </AlertDescription>
               </Alert>
+            ) : null}
+            <input
+              type="hidden"
+              name="turnstile"
+              value={turnstileToken}
+              required
+            />
+            {/* CAPTCHA widgets - only rendered when user interacts with form or there are errors */}
+            {renderCaptchas ? (
+              <div className="flex w-full justify-center">
+                {/* Turnstile widget container */}
+                <div className="flex flex-col items-center">
+                  <Turnstile
+                    sitekey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+                    onVerify={(token) => {
+                      setTurnstileToken(token);
+                    }}
+                  />
+                  {/* Display Turnstile verification errors if any */}
+                  {actionData &&
+                  "errors" in actionData &&
+                  actionData.errors?.turnstile ? (
+                    <FormErrors
+                      key="turnstile"
+                      errors={actionData.errors.turnstile}
+                    />
+                  ) : null}
+                </div>
+              </div>
             ) : null}
           </Form>
           <SignUpButtons />

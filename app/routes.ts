@@ -94,7 +94,6 @@ export default [
       route("/logout", "features/auth/screens/logout.tsx"),
     ]),
 
-    route("/contact", "features/contact/screens/contact-us.tsx"),
     ...prefix("/payments", [
       route("/checkout", "features/payments/screens/checkout.tsx"),
       layout("core/layouts/private.layout.tsx", { id: "private-payments" }, [
