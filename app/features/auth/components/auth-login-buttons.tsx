@@ -33,7 +33,7 @@ import { KakaoLogo } from "./logos/kakao";
  * @param href - URL path to the authentication flow for this provider
  */
 
-function AuthLoginButton({
+function AuthSignUpButton({
   logo,
   label,
   href,
@@ -51,6 +51,29 @@ function AuthLoginButton({
       <Link to={href}>
         <span>{logo}</span>
         <span>{label} 회원가입</span>
+      </Link>
+    </Button>
+  );
+}
+
+function AuthSignInButton({
+  logo,
+  label,
+  href,
+}: {
+  logo: React.ReactNode;
+  label: string;
+  href: string;
+}) {
+  return (
+    <Button
+      variant="outline"
+      className="inline-flex items-center justify-center gap-2"
+      asChild
+    >
+      <Link to={href}>
+        <span>{logo}</span>
+        <span>{label} 로그인</span>
       </Link>
     </Button>
   );
@@ -119,7 +142,19 @@ function Divider() {
 function SocialLoginButtons() {
   return (
     <>
-      <AuthLoginButton
+      <AuthSignInButton
+        logo={<KakaoLogo className="size-4 scale-125 dark:text-yellow-300" />}
+        label="Kakao"
+        href="/auth/social/start/kakao"
+      />
+    </>
+  );
+}
+
+function SocialSignUpButtons() {
+  return (
+    <>
+      <AuthSignUpButton
         logo={<KakaoLogo className="size-4 scale-125 dark:text-yellow-300" />}
         label="Kakao"
         href="/auth/social/start/kakao"
@@ -164,7 +199,7 @@ export function SignUpButtons() {
   return (
     <>
       <Divider />
-      <SocialLoginButtons />
+      <SocialSignUpButtons />
     </>
   );
 }
