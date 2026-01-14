@@ -10,6 +10,18 @@
  * 2. File system operations for reading blog content
  * 3. Responsive grid layout for different screen sizes
  * 4. View transitions for smooth navigation between pages
+ *
+ * 블로그 포스트 화면
+ *
+ * 이 컴포넌트는 docs 디렉토리의 MDX 파일에서 블로그 포스트 목록을 표시합니다.
+ * mdx-bundler를 사용하여 MDX 파일에서 frontmatter를 추출하고 이미지, 제목, 설명 및 메타데이터가 포함된
+ * 블로그 포스트 카드 그리드를 렌더링합니다.
+ *
+ * 블로그 구현은 다음을 보여줍니다:
+ * 1. frontmatter 추출을 포함한 MDX 콘텐츠 처리
+ * 2. 블로그 콘텐츠를 읽기 위한 파일 시스템 작업
+ * 3. 다양한 화면 크기에 대응하는 반응형 그리드 레이아웃
+ * 4. 페이지 간의 부드러운 이동을 위한 뷰 전환(View transitions)
  */
 import type { Route } from "./+types/posts";
 
@@ -113,8 +125,26 @@ export async function loader() {
  * It also implements view transitions for smooth navigation between the posts list
  * and individual post pages.
  *
+ * 블로그 포스트 컴포넌트
+ *
+ * 이 컴포넌트는 헤더와 블로그 포스트 카드 그리드로 구성된 블로그 포스트 페이지를 렌더링합니다.
+ * 각 카드는 다음 정보를 표시합니다:
+ * - 대표 이미지 (포스트 슬러그와 일치)
+ * - 카테고리 배지
+ * - 포스트 제목
+ * - 포스트 설명
+ * - 작성자 및 날짜 정보
+ *
+ * 이 컴포넌트는 모바일과 데스크톱 환경에 따라 다른 레이아웃을 사용하는 반응형 디자인을 적용합니다:
+ * - 모바일 기기: 단일 열 레이아웃
+ * - 데스크톱 기기: 3열 그리드 레이아웃
+ *
+ * 또한 포스트 목록과 개별 포스트 페이지 간의 부드러운 이동을 위해 뷰 전환(view transitions)을 구현합니다.
+ *
  * @param loaderData - Data from the loader containing blog post frontmatter
+ * @param loaderData - 블로그 포스트 프론트매터 데이터를 포함하는 로더 데이터
  */
+
 export default function Posts({
   loaderData: { frontmatters },
 }: Route.ComponentProps) {
