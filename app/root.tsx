@@ -142,6 +142,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
  * - Special handling for pre-rendered routes (blog, legal pages)
  * - Loading of analytics and customer support scripts
  *
+ * 내부 레이아웃 컴포넌트
+ *
+ * 이 컴포넌트는 애플리케이션의 HTML 구조를 처리하며 다음을 적용합니다:
+ * - 현재 로케일에 기반한 언어 방향 (RTL/LTR)
+ * - HTML 요소에 테마 클래스 적용
+ * - 사전 렌더링된 경로 (블로그, 법적 페이지)에 대한 특별 처리
+ * - 분석 및 고객 지원 스크립트 로드
+ *
  * @param children - Child components to render within the layout
  */
 function InnerLayout({ children }: { children: React.ReactNode }) {
