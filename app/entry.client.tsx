@@ -1,17 +1,16 @@
 /**
  * Client Entry Point
- * 
+ *
  * This file serves as the entry point for the client-side portion of the application.
  * It handles hydration of the React application, initialization of critical services
  * like internationalization and error monitoring, and ensures optimal loading performance.
- * 
+ *
  * Key features:
  * - Sentry integration for client-side error monitoring and session replay
  * - Internationalization (i18n) setup with language detection
  * - React hydration with performance optimizations
  * - Multi-language support (English, Spanish, Korean)
  */
-
 import * as Sentry from "@sentry/react-router";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
@@ -29,18 +28,18 @@ import ko from "./locales/ko";
 
 /**
  * Hydration function for client-side initialization
- * 
+ *
  * This asynchronous function handles the complete client-side initialization process:
  * 1. Initializes Sentry for error monitoring (production only)
  * 2. Sets up i18next for internationalization with language detection
  * 3. Hydrates the React application with the server-rendered HTML
- * 
+ *
  * The function is called using requestIdleCallback or setTimeout for optimal
  * performance, ensuring that critical user interactions are not blocked.
  */
 async function hydrate() {
   // Initialize Sentry for error monitoring in production environments only
-  if (import.meta.env.VITE_SENTRY_DSN && !import.meta.env.DEV) {
+  if (import.meta.env.VITE_SENTRY_DSN) {
     Sentry.init({
       dsn: import.meta.env.VITE_SENTRY_DSN,
       // Capture all replays for errors
@@ -102,11 +101,11 @@ async function hydrate() {
 
 /**
  * Optimal hydration scheduling
- * 
+ *
  * This code schedules the hydration process using the most efficient method available:
  * - requestIdleCallback: Used when available to run hydration during browser idle time
  * - setTimeout: Used as a fallback for browsers that don't support requestIdleCallback
- * 
+ *
  * This approach ensures that the hydration process doesn't block critical user interactions
  * and provides the best possible user experience, especially on lower-end devices.
  */

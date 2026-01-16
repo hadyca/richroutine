@@ -1,5 +1,6 @@
 {
   "importOrder": [
+    "^../instrument.server.mjs$",
     "^.+\\.(css|scss|sass|less|styl|svg|png|jpg|jpeg|gif|webp)$",
     "<THIRD_PARTY_TS_TYPES>",
     "<TS_TYPES>^[./]",

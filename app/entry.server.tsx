@@ -12,6 +12,8 @@
  * 5. Optimizing rendering for bots and search engines
  * 6. Managing streaming timeouts to prevent hanging requests
  */
+import "../instrument.server.mjs";
+
 import type { RenderToPipeableStreamOptions } from "react-dom/server";
 import type {
   AppLoadContext,
@@ -23,7 +25,6 @@ import { createReadableStreamFromReadable } from "@react-router/node";
 import * as Sentry from "@sentry/react-router";
 import { createInstance } from "i18next";
 import { isbot } from "isbot";
-import { createRequire } from "node:module";
 import { PassThrough } from "node:stream";
 import { renderToPipeableStream } from "react-dom/server";
 import { I18nextProvider, initReactI18next } from "react-i18next";
@@ -39,27 +40,6 @@ import en from "./locales/en";
 import es from "./locales/es";
 // Spanish translations
 import ko from "./locales/ko";
-
-if (process.env.SENTRY_DSN) {
-  let integrations = [];
-  try {
-    const require = createRequire(import.meta.url);
-    const { nodeProfilingIntegration } = require("@sentry/profiling-node");
-    integrations.push(nodeProfilingIntegration());
-  } catch (error) {
-    // Profiling is optional; skip if binary is missing (common in new Node versions)
-    console.warn("Sentry profiling disabled:", error);
-  }
-
-  Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-    integrations,
-    tracesSampleRate: 1.0,
-    profilesSampleRate: 1.0,
-  });
-}
-
-// Korean translations
 
 /**
  * Maximum time in milliseconds to wait for streaming content
