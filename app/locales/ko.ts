@@ -2,7 +2,7 @@ import type { Translation } from "./types";
 
 const ko: Translation = {
   home: {
-    title: "리치 루틴",
+    title: "리치루틴",
     subtitle: "가즈아~~!",
   },
   navigation: {

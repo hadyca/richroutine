@@ -91,7 +91,7 @@ export async function action({ request }: Route.LoaderArgs) {
         // Make sure this domain is the Resend domain.
         from: "Richroutine <hello@mail.richroutine.net>",
         to: [to],
-        subject: "리치 루틴에 오신 것을 환영합니다!",
+        subject: "리치루틴에 오신 것을 환영합니다!",
         react: WelcomeEmail({ profile: JSON.stringify(emailData, null, 2) }),
       });
       // Log any errors that occur during email sending
