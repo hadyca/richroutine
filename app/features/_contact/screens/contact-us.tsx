@@ -29,8 +29,6 @@
  *
  * 이 구현은 프로덕션 애플리케이션에서 강력한 양식 보호 및 유효성 검사를 구현하는 방법에 대한 데모 역할을 합니다.
  */
-import type { Route } from "./+types/contact-us";
-
 import { useEffect, useRef, useState } from "react";
 import { Form, data } from "react-router";
 import Turnstile, { useTurnstile } from "react-turnstile";
