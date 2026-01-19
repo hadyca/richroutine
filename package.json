@@ -33,7 +33,6 @@
     "@react-router/node": "^7.5.1",
     "@react-router/serve": "^7.5.1",
     "@sentry/browser": "^9.6.1",
-    "@sentry/profiling-node": "^9.10.1",
     "@sentry/react-router": "^9.10.1",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.1",
