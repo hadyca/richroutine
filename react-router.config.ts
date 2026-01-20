@@ -11,11 +11,12 @@ declare module "react-router" {
   }
 }
 
-const urls = (
-  await readdir(path.join(process.cwd(), "app", "features", "blog", "docs"))
-)
-  .filter((file) => file.endsWith(".mdx"))
-  .map((file) => `/blog/${file.replace(".mdx", "")}`);
+//추 후 blog 같은거 운영 할 때 사용
+// const urls = (
+//   await readdir(path.join(process.cwd(), "app", "features", "blog", "docs"))
+// )
+//   .filter((file) => file.endsWith(".mdx"))
+//   .map((file) => `/blog/${file.replace(".mdx", "")}`);
 
 export default {
   ssr: true,
@@ -23,10 +24,10 @@ export default {
     return [
       "/legal/terms-of-service",
       "/legal/privacy-policy",
-      "/blog",
+      // "/blog",
       "/sitemap.xml",
       "/robots.txt",
-      ...urls,
+      // ...urls,
     ];
   },
   presets: [

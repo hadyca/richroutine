@@ -52,6 +52,7 @@ const sessionStorage = createCookieSessionStorage({
     path: "/",
     httpOnly: false,
     sameSite: "lax",
+    secrets: [process.env.COOKIE_SECRET!],
   },
 });
 

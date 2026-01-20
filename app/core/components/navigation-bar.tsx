@@ -133,7 +133,7 @@ function AuthButtons() {
       <Button variant="ghost" asChild>
         <SheetClose asChild>
           <Link to="/login" viewTransition>
-            Sign in
+            로그인
           </Link>
         </SheetClose>
       </Button>
@@ -142,7 +142,7 @@ function AuthButtons() {
       <Button variant="default" asChild>
         <SheetClose asChild>
           <Link to="/join" viewTransition>
-            Sign up
+            회원가입
           </Link>
         </SheetClose>
       </Button>
@@ -167,14 +167,13 @@ function Actions() {
   return (
     <>
       {/* Settings/debug dropdown menu */}
-      <DropdownMenu>
+      {/* <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">
           <Button variant="ghost" size="icon">
             <CogIcon className="size-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {/* Sentry monitoring link */}
           <DropdownMenuItem asChild>
             <SheetClose asChild>
               <Link to="/debug/sentry" viewTransition>
@@ -182,7 +181,6 @@ function Actions() {
               </Link>
             </SheetClose>
           </DropdownMenuItem>
-          {/* Google Analytics link */}
           <DropdownMenuItem asChild>
             <SheetClose asChild>
               <Link to="/debug/analytics" viewTransition>
@@ -191,13 +189,14 @@ function Actions() {
             </SheetClose>
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> */}
 
       {/* Theme switcher component (light/dark mode) */}
       <ThemeSwitcher />
 
       {/* Language switcher component */}
-      <LangSwitcher />
+      {/* 다국어 세팅 시 사용 */}
+      {/* <LangSwitcher /> */}
     </>
   );
 }
@@ -254,25 +253,11 @@ export function NavigationBar({
         <div className="hidden h-full items-center gap-5 md:flex">
           {/* Main navigation links */}
           <Link
-            to="/blog"
-            viewTransition
-            className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-          >
-            Blog
-          </Link>
-          <Link
-            to="/contact"
-            viewTransition
-            className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-          >
-            Contact
-          </Link>
-          <Link
             to="/payments/checkout"
             viewTransition
             className="text-muted-foreground hover:text-foreground text-sm transition-colors"
           >
-            Payments
+            구독
           </Link>
 
           <Separator orientation="vertical" />
@@ -308,13 +293,7 @@ export function NavigationBar({
         <SheetContent>
           <SheetHeader>
             <SheetClose asChild>
-              <Link to="/blog">Blog</Link>
-            </SheetClose>
-            <SheetClose asChild>
-              <Link to="/contact">Contact</Link>
-            </SheetClose>
-            <SheetClose asChild>
-              <Link to="/payments/checkout">Payments</Link>
+              <Link to="/payments/checkout">구독</Link>
             </SheetClose>
           </SheetHeader>
           {loading ? (

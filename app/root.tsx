@@ -42,7 +42,7 @@ import { Toaster } from "sonner";
 
 import { Dialog } from "./core/components/ui/dialog";
 import { Sheet } from "./core/components/ui/sheet";
-import i18next from "./core/lib/i18next.server";
+// import i18next from "./core/lib/i18next.server"; 향 후 다국어 지원시 세팅
 import { themeSessionResolver } from "./core/lib/theme-session.server";
 import { cn } from "./core/lib/utils";
 import NotFound from "./core/screens/404";
@@ -93,10 +93,14 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 
   // Concurrently load theme and locale preferences for better performance
-  const [{ getTheme }, locale] = await Promise.all([
-    themeSessionResolver(request),
-    i18next.getLocale(request),
-  ]);
+  // TODO: 향 후 다국어 지원시 세팅
+  // const [{ getTheme }, locale] = await Promise.all([
+  //   themeSessionResolver(request),
+  //   i18next.getLocale(request),
+  // ]);
+
+  const { getTheme } = await themeSessionResolver(request);
+  const locale = "ko";
 
   return {
     theme: getTheme(),
@@ -108,9 +112,10 @@ export async function loader({ request }: Route.LoaderArgs) {
  * i18n handle for the root route
  * Specifies that this route uses the 'common' translation namespace
  */
-export const handle = {
-  i18n: "common",
-};
+// TODO: 향 후 다국어 지원시 세팅
+// export const handle = {
+//   i18n: "common",
+// };
 
 /**
  * Primary Layout Component
@@ -159,16 +164,18 @@ function InnerLayout({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
 
   // Set the i18next language based on the locale from the loader
-  useChangeLanguage(data?.locale ?? "en");
+  useChangeLanguage(data?.locale ?? "ko");
 
   // Detect if the current route is a pre-rendered page (blog or legal)
   // These pages require special theme handling
-  const isPreRendered =
-    pathname.includes("/legal") || pathname.includes("/blog");
+  // const isPreRendered =
+  //   pathname.includes("/legal") || pathname.includes("/blog");
+
+  const isPreRendered = pathname.includes("/legal");
 
   return (
     <html
-      lang={data?.locale ?? "en"}
+      lang={data?.locale ?? "ko"}
       className={cn(theme ?? "", "h-full")}
       dir={i18n.dir()}
     >
@@ -265,7 +272,7 @@ export default function App() {
         navigate(`/error?${searchParams.toString()}`);
       } else if (code) {
         // Redirect to dashboard if authentication succeeded
-        navigate(`/dashboard/account`);
+        navigate(`/`);
       }
     }
   }, [searchParams]);
