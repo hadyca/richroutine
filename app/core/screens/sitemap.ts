@@ -45,6 +45,20 @@ import path from "node:path";
  * 5. Formats all URLs according to the sitemap XML specification
  * 6. Returns an XML response with the proper content type header
  *
+ * 사이트맵 생성기 로더 함수
+ *
+ * 이 React Router 로더 함수는 애플리케이션을 위한 XML 사이트맵을 동적으로 생성합니다.
+ * 파일 시스템에서 콘텐츠 파일을 스캔하고, 이를 정적 경로와 결합하며, 사이트맵 프로토콜
+ * 사양에 따라 형식을 지정합니다.
+ *
+ * 이 함수는 다음 단계를 수행합니다:
+ * 1. 환경 변수에서 사이트 도메인을 가져옵니다.
+ * 2. 블로그 디렉토리에서 MDX 파일을 스캔하고 파일 이름을 URL로 변환합니다.
+ * 3. 법적 고지 디렉토리에서 MDX 파일을 스캔하고 파일 이름을 URL로 변환합니다.
+ * 4. 이를 홈페이지, 로그인, 회원가입과 같은 정적 경로와 결합합니다.
+ * 5. 모든 URL을 사이트맵 XML 사양에 따라 형식을 지정합니다.
+ * 6. 적절한 콘텐츠 유형 헤더와 함께 XML 응답을 반환합니다.
+ *
  * @returns {Response} XML response containing the sitemap
  */
 export async function loader() {

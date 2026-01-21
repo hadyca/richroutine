@@ -24,12 +24,6 @@ import {
 export default [
   route("/robots.txt", "core/screens/robots.ts"),
   route("/sitemap.xml", "core/screens/sitemap.ts"),
-  ...prefix("/debug", [
-    // You should delete this in production.
-    // 프로덕션 환경에서는 이 부분을 삭제해야 합니다.
-    // route("/sentry", "debug/sentry.tsx"),
-    // route("/analytics", "debug/analytics.tsx"),
-  ]),
   // API Routes. Routes that export actions and loaders but no UI.
   // API 라우트. 액션과 로더를 내보내지만 UI는 없는 라우트입니다.
   ...prefix("/api", [
@@ -49,7 +43,6 @@ export default [
       ),
     ]),
     ...prefix("/cron", [route("/mailer", "features/cron/api/mailer.tsx")]),
-    // ...prefix("/blog", [route("/og", "features/blog/api/og.tsx")]),
   ]),
 
   layout("core/layouts/navigation.layout.tsx", [
@@ -114,11 +107,4 @@ export default [
   ]),
 
   ...prefix("/legal", [route("/:slug", "features/legal/screens/policy.tsx")]),
-
-  // layout("features/blog/layouts/blog.layout.tsx", [
-  //   ...prefix("/blog", [
-  //     index("features/blog/screens/posts.tsx"),
-  //     route("/:slug", "features/blog/screens/post.tsx"),
-  //   ]),
-  // ]),
 ] satisfies RouteConfig;
