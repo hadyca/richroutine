@@ -12,17 +12,31 @@
  *
  * The sitemap is generated on-demand when the route is accessed, ensuring it always
  * contains the latest content without requiring a rebuild of the application.
+ *
+ * 사이트맵 생성기 모듈
+ *
+ * 이 모듈은 콘텐츠 디렉토리를 스캔하고 이를 정적 경로와 결합하여 애플리케이션의 XML 사이트맵을
+ * 동적으로 생성합니다. 사이트맵은 검색 엔진이 애플리케이션의 페이지를 검색하고 색인화하는 데
+ * 도움을 주어 SEO 성능을 향상시킵니다.
+ *
+ * 이 모듈은 다음을 자동으로 포함합니다:
+ * - blog 디렉토리의 MDX 파일에서 가져온 블로그 포스트
+ * - legal 디렉토리의 MDX 파일에서 가져온 법적 고지 페이지
+ * - 코드에 정의된 사용자 정의 정적 경로
+ *
+ * 사이트맵은 경로에 액세스할 때 온디맨드 방식으로 생성되므로, 애플리케이션을 다시 빌드할
+ * 필요 없이 항상 최신 콘텐츠를 포함합니다.
  */
 import { readdir } from "node:fs/promises";
 import path from "node:path";
 
 /**
  * Sitemap generator loader function
- * 
+ *
  * This React Router loader function dynamically generates an XML sitemap for the application.
  * It scans the filesystem for content files, combines them with static routes, and formats
  * them according to the sitemap protocol specification.
- * 
+ *
  * The function performs these steps:
  * 1. Gets the site domain from environment variables
  * 2. Scans the blog directory for MDX files and converts filenames to URLs
@@ -30,7 +44,7 @@ import path from "node:path";
  * 4. Combines these with static routes like homepage, login, and registration
  * 5. Formats all URLs according to the sitemap XML specification
  * 6. Returns an XML response with the proper content type header
- * 
+ *
  * @returns {Response} XML response containing the sitemap
  */
 export async function loader() {
@@ -38,11 +52,11 @@ export async function loader() {
   const DOMAIN = process.env.SITE_URL;
 
   // Scan the blog directory for MDX files and convert to URLs
-  const blogUrls = (
-    await readdir(path.join(process.cwd(), "app", "features", "blog", "docs"))
-  )
-    .filter((file) => file.endsWith(".mdx")) // Only include MDX files
-    .map((file) => `/blog/${file.replace(".mdx", "")}`);
+  // const blogUrls = (
+  //   await readdir(path.join(process.cwd(), "app", "features", "blog", "docs"))
+  // )
+  //   .filter((file) => file.endsWith(".mdx")) // Only include MDX files
+  //   .map((file) => `/blog/${file.replace(".mdx", "")}`);
 
   // Scan the legal directory for MDX files and convert to URLs
   const legalUrls = (
@@ -55,7 +69,7 @@ export async function loader() {
   const customUrls = ["/", "/login", "/join"];
 
   // Combine all URLs and format them according to sitemap protocol
-  const sitemapUrls = [...blogUrls, ...legalUrls, ...customUrls].map((url) => {
+  const sitemapUrls = [...legalUrls, ...customUrls].map((url) => {
     return `<url>
       <loc>${DOMAIN}${url}</loc>
       <lastmod>${new Date().toISOString()}</lastmod>
