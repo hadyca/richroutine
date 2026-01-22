@@ -15,6 +15,8 @@ import type { Route } from "./+types/home";
 
 import { useTranslation } from "react-i18next";
 
+import { AuroraText } from "~/core/components/ui/aurora-text";
+import { Button } from "~/core/components/ui/button";
 import i18next from "~/core/lib/i18next.server";
 
 /**
@@ -87,17 +89,20 @@ export default function Home() {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2.5">
-      {/* Main headline with responsive typography */}
-      <h1 className="text-4xl font-extrabold tracking-tight lg:text-6xl">
-        남들보다 1시간 빠른 정보, 읽는 시간은 3분이면 충분합니다.
-      </h1>
-
-      {/* Subtitle */}
-      <h2 className="text-2xl">
-        미국·국내 증시부터 내 관심 종목까지, AI가 핵심 뉴스만 요약해 매일 아침
-        9시 이메일로 보내드려요.
-      </h2>
-    </div>
+    <>
+      <div className="flex flex-col gap-3">
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-6xl">
+          <AuroraText>리치루틴</AuroraText>
+        </h1>
+        <h2 className="text-muted-foreground text-xl">
+          상위 1% 자본가의 루틴은 아침부터 시작됩니다.
+          <br />
+          미국/국내 주식부터 부동산까지, AI가 요약한 뉴스를 쉽게 만나보세요.
+        </h2>
+      </div>
+      <div>
+        <Button>시작하기</Button>
+      </div>
+    </>
   );
 }
