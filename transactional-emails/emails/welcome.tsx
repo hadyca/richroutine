@@ -11,7 +11,6 @@ import {
 } from "@react-email/components";
 
 export default function Welcome({ profile }: { profile: string }) {
-  console.log("리센드 함수작동");
   return (
     <Tailwind>
       <Html>

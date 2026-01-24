@@ -16,6 +16,7 @@ import type { Route } from "./+types/home";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { AnimatedGradientText } from "~/core/components/ui/animated-gradient-text";
 import { AuroraText } from "~/core/components/ui/aurora-text";
 import { Button } from "~/core/components/ui/button";
 import { Marquee } from "~/core/components/ui/marquee";
@@ -184,75 +185,119 @@ export default function Home() {
   return (
     <>
       {/* 히어로 섹션 */}
-      <div className="grid grid-cols-2">
-        <div className="flex flex-col gap-3">
-          <div>
-            <h1 className="text-5xl font-extrabold tracking-tight lg:text-7xl">
-              <AuroraText>리치루틴</AuroraText>
-            </h1>
-            <h2 className="text-muted-foreground text-xl">
-              상위 1% 자본가의 루틴은 아침부터 시작됩니다.
-              <br />
-              미국/국내 주식부터 부동산까지, AI가 요약한 뉴스를 쉽게 만나보세요.
-            </h2>
-          </div>
-          <div className="mt-6">
-            <Button size="lg" className="font-semibold">
-              무료로 시작하기
-            </Button>
-          </div>
-        </div>
-        <div className="flex flex-col items-center justify-center">
-          <div className="flex w-full max-w-sm flex-col gap-3">
-            <span className="text-center text-4xl font-semibold tracking-tight">
-              2026년 회원수 목표
-            </span>
-            <Progress value={progress} className="relative h-8 shadow-sm">
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-1">
-                <div>
-                  <NumberTicker
-                    value={500}
-                    className="text-primary-foreground font-bold"
-                    delay={0.5}
-                  />
-                  <span className="text-primary-foreground font-bold">명</span>
-                </div>
-                <div>
-                  <span className="text-primary-foreground font-bold">(</span>
-                  <NumberTicker
-                    value={50}
-                    className="text-primary-foreground font-bold"
-                    delay={0.5}
-                  />
-                  <span className="text-primary-foreground font-bold">%</span>
-                  <span className="text-primary-foreground font-bold">)</span>
+      <section className="flex h-[calc(100vh-300px)] flex-col justify-between pt-0 pb-4">
+        <div className="flex flex-1 items-center pt-8">
+          <div className="grid w-full grid-cols-2 gap-8">
+            <div className="flex flex-col gap-5">
+              <div className="group relative flex w-fit items-center justify-center rounded-full px-4 py-1.5 shadow-[inset_0_-8px_10px_#8fdfff1f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#8fdfff3f]">
+                <span
+                  className={cn(
+                    "animate-gradient absolute inset-0 block h-full w-full rounded-[inherit] bg-gradient-to-r from-[#ffaa40]/50 via-[#9c40ff]/50 to-[#ffaa40]/50 bg-[length:300%_100%] p-[1px]",
+                  )}
+                  style={{
+                    WebkitMask:
+                      "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "destination-out",
+                    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    maskComposite: "subtract",
+                    WebkitClipPath: "padding-box",
+                  }}
+                />
+                🎉 <hr className="mx-2 h-4 w-px shrink-0 bg-neutral-500" />
+                <AnimatedGradientText className="text-sm font-medium">
+                  2026 Beta
+                </AnimatedGradientText>
+              </div>
+
+              <div>
+                <h1 className="text-5xl font-extrabold tracking-tight lg:text-7xl">
+                  <AuroraText>리치루틴</AuroraText>
+                </h1>
+                <h2 className="text-muted-foreground mt-3 text-xl">
+                  상위 1% 자본가의 루틴은 아침부터 시작됩니다.
+                  <br />
+                  미국/국내 주식부터 부동산까지, AI가 요약한 뉴스를 쉽게
+                  만나보세요.
+                </h2>
+              </div>
+              <div className="mt-2">
+                <Button size="lg" className="px-8 py-5 text-lg font-semibold">
+                  무료로 시작하기
+                </Button>
+              </div>
+            </div>
+            <div className="flex flex-col items-center justify-center">
+              <div className="flex w-full max-w-sm flex-col gap-3">
+                <span className="text-center text-3xl font-semibold tracking-tight">
+                  2026년 회원수 목표
+                </span>
+                <Progress value={progress} className="relative h-7 shadow-sm">
+                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-1">
+                    <div>
+                      <NumberTicker
+                        value={500}
+                        className="text-primary-foreground font-bold"
+                        delay={0.5}
+                      />
+                      <span className="text-primary-foreground text-sm font-bold">
+                        명
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-primary-foreground text-sm font-bold">
+                        (
+                      </span>
+                      <NumberTicker
+                        value={50}
+                        className="text-primary-foreground text-sm font-bold"
+                        delay={0.5}
+                      />
+                      <span className="text-primary-foreground text-sm font-bold">
+                        %
+                      </span>
+                      <span className="text-primary-foreground text-sm font-bold">
+                        )
+                      </span>
+                    </div>
+                  </div>
+                </Progress>
+                <div className="flex w-full items-center justify-between px-1 text-sm font-medium">
+                  <span>0명</span>
+                  <span>목표 1,000명</span>
                 </div>
               </div>
-            </Progress>
-            <div className="flex w-full items-center justify-between px-1 font-medium">
-              <span>0명</span>
-              <span>목표 1,000명</span>
             </div>
           </div>
         </div>
-      </div>
-      <div className="mt-20 flex flex-wrap items-center justify-center gap-x-16 gap-y-8">
-        {[
-          "/naver-logo.svg",
-          "/Yahoo!_Finance_logo.svg",
-          "/naver-logo.svg",
-          "/Yahoo!_Finance_logo.svg",
-          "/naver-logo.svg",
-        ].map((logo, idx) => (
-          <img
-            key={idx}
-            src={logo}
-            alt="brand-logo"
-            className="h-8 w-auto opacity-40 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 dark:opacity-30 dark:invert dark:hover:opacity-100 dark:hover:brightness-0 dark:hover:invert"
-          />
-        ))}
-      </div>
+
+        {/* 로고 섹션 */}
+        <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4 py-4">
+          {[
+            "/naver-logo.svg",
+            "/Yahoo!_Finance_logo.svg",
+            "/naver-logo.svg",
+            "/Yahoo!_Finance_logo.svg",
+            "/naver-logo.svg",
+          ].map((logo, idx) => (
+            <img
+              key={idx}
+              src={logo}
+              alt="brand-logo"
+              className="h-6 w-auto opacity-40 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 dark:opacity-30 dark:invert dark:hover:opacity-100 dark:hover:brightness-0 dark:hover:invert"
+            />
+          ))}
+        </div>
+      </section>
+
       {/* 기능 섹션 */}
+
+      <div className="mt-40 mb-20 w-3/4">
+        <span className="text-[54px] font-bold tracking-tighter">
+          AI가 설계한 루틴 AI가 설계한 루틴 AI가 설계한 루틴 AI가 설계한 루틴
+          AI가 설계한 루틴 AI가 설계한 루틴
+        </span>
+      </div>
+
       <div className="mt-52 flex flex-col gap-6">
         <div className="grid grid-cols-3">
           <div className="col-span-1 flex flex-col justify-center">
