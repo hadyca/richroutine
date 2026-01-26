@@ -306,7 +306,7 @@ export default function Home() {
         <TypingAnimation
           startOnView
           words={[
-            "AI가 설계한 루틴 AI가 설계한 루틴 AI가 설계한 루틴 AI가 설계한 루틴",
+            "리치루틴은 방대한 데이터 속의 소음을 제거하고, 오직 당신의 자산을 불릴 핵심 시그널만 추출합니다.",
           ]}
           typeSpeed={50}
           className="text-[54px] font-bold tracking-tighter"
