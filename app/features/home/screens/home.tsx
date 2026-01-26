@@ -19,10 +19,12 @@ import { useTranslation } from "react-i18next";
 import { AnimatedGradientText } from "~/core/components/ui/animated-gradient-text";
 import { AuroraText } from "~/core/components/ui/aurora-text";
 import { Button } from "~/core/components/ui/button";
+import { Card } from "~/core/components/ui/card";
 import { Marquee } from "~/core/components/ui/marquee";
 import { NumberTicker } from "~/core/components/ui/number-ticker";
 import { Progress } from "~/core/components/ui/progress";
 import { TextAnimate } from "~/core/components/ui/text-animate";
+import { TypingAnimation } from "~/core/components/ui/typing-animation";
 import i18next from "~/core/lib/i18next.server";
 import { cn } from "~/core/lib/utils";
 
@@ -103,10 +105,10 @@ export default function Home() {
 
   const reviews = [
     {
-      name: "Jack",
-      username: "@jack",
-      body: "I've never seen anything like this before. It's amazing. I love it.",
-      img: "https://avatar.vercel.sh/jack",
+      name: "이개토",
+      username: "스튜디오 사업가",
+      body: "워렌 버핏은 매일 아침 경제 신문을 본다고 합니다.\n저같은 경우 경제에 무지해 어디서 어떻게 시작해야 할지 몰라 속는셈치고 구독하기 시작하였는데, 경제 전반에 대한 내용들이 알기 쉽게 잘 정리되어 있네요.\n\n특히나 보유중인 종목 등록 후 내 종목에 미치는 영향까지 알려주니 심적으로 안정이 됩니다! \n리치루틴 가즈아~",
+      img: "./public/lee.jpg",
     },
     {
       name: "Jill",
@@ -155,7 +157,7 @@ export default function Home() {
     return (
       <figure
         className={cn(
-          "relative h-full w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
+          "relative h-fit w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
           // light styles
           "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
           // dark styles
@@ -177,7 +179,9 @@ export default function Home() {
             <p className="text-xs font-medium dark:text-white/40">{username}</p>
           </div>
         </div>
-        <blockquote className="mt-2 text-sm">{body}</blockquote>
+        <blockquote className="mt-2 text-sm whitespace-pre-wrap">
+          {body}
+        </blockquote>
       </figure>
     );
   };
@@ -185,10 +189,10 @@ export default function Home() {
   return (
     <>
       {/* 히어로 섹션 */}
-      <section className="flex h-[calc(100vh-300px)] flex-col justify-between pt-0 pb-4">
-        <div className="flex flex-1 items-center pt-8">
-          <div className="grid w-full grid-cols-2 gap-8">
-            <div className="flex flex-col gap-5">
+      <section className="flex h-[calc(100vh-300px)] flex-col justify-between">
+        <div className="flex items-center justify-center">
+          <div className="grid w-full grid-cols-2">
+            <div className="flex flex-col gap-8">
               <div className="group relative flex w-fit items-center justify-center rounded-full px-4 py-1.5 shadow-[inset_0_-8px_10px_#8fdfff1f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#8fdfff3f]">
                 <span
                   className={cn(
@@ -209,69 +213,76 @@ export default function Home() {
                 </AnimatedGradientText>
               </div>
 
-              <div>
+              <div className="flex flex-col gap-3">
                 <h1 className="text-5xl font-extrabold tracking-tight lg:text-7xl">
                   <AuroraText>리치루틴</AuroraText>
                 </h1>
-                <h2 className="text-muted-foreground mt-3 text-xl">
-                  상위 1% 자본가의 루틴은 아침부터 시작됩니다.
+                <h2 className="text-muted-foreground mt-3 text-xl tracking-tight">
+                  상위 1% 투자자의 루틴은 아침부터 시작됩니다.
                   <br />
                   미국/국내 주식부터 부동산까지, AI가 요약한 뉴스를 쉽게
                   만나보세요.
                 </h2>
               </div>
               <div className="mt-2">
-                <Button size="lg" className="px-8 py-5 text-lg font-semibold">
+                <Button size="lg" className="text-lg font-semibold">
                   무료로 시작하기
                 </Button>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center">
-              <div className="flex w-full max-w-sm flex-col gap-3">
-                <span className="text-center text-3xl font-semibold tracking-tight">
-                  2026년 회원수 목표
-                </span>
-                <Progress value={progress} className="relative h-7 shadow-sm">
-                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-1">
-                    <div>
-                      <NumberTicker
-                        value={500}
-                        className="text-primary-foreground font-bold"
-                        delay={0.5}
-                      />
-                      <span className="text-primary-foreground text-sm font-bold">
-                        명
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-primary-foreground text-sm font-bold">
-                        (
-                      </span>
-                      <NumberTicker
-                        value={50}
-                        className="text-primary-foreground text-sm font-bold"
-                        delay={0.5}
-                      />
-                      <span className="text-primary-foreground text-sm font-bold">
-                        %
-                      </span>
-                      <span className="text-primary-foreground text-sm font-bold">
-                        )
-                      </span>
+            <Card className="flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center">
+                <div className="flex w-full max-w-sm flex-col gap-4">
+                  <span className="text-center text-4xl font-semibold tracking-tight">
+                    2026년 회원수 목표
+                  </span>
+                  <div className="flex flex-col gap-2">
+                    <Progress
+                      value={progress}
+                      className="relative h-7 shadow-sm"
+                    >
+                      <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-1">
+                        <div>
+                          <NumberTicker
+                            value={500}
+                            className="text-primary-foreground font-bold"
+                            delay={0.5}
+                          />
+                          <span className="text-primary-foreground text-sm font-bold">
+                            명
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-primary-foreground text-sm font-bold">
+                            (
+                          </span>
+                          <NumberTicker
+                            value={50}
+                            className="text-primary-foreground text-sm font-bold"
+                            delay={0.5}
+                          />
+                          <span className="text-primary-foreground text-sm font-bold">
+                            %
+                          </span>
+                          <span className="text-primary-foreground text-sm font-bold">
+                            )
+                          </span>
+                        </div>
+                      </div>
+                    </Progress>
+                    <div className="flex w-full items-center justify-between px-1 text-sm font-medium">
+                      <span>0명</span>
+                      <span>목표 1,000명</span>
                     </div>
                   </div>
-                </Progress>
-                <div className="flex w-full items-center justify-between px-1 text-sm font-medium">
-                  <span>0명</span>
-                  <span>목표 1,000명</span>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
 
         {/* 로고 섹션 */}
-        <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4 py-4">
+        <div className="flex flex-wrap items-center justify-center gap-32">
           {[
             "/naver-logo.svg",
             "/Yahoo!_Finance_logo.svg",
@@ -292,10 +303,14 @@ export default function Home() {
       {/* 기능 섹션 */}
 
       <div className="mt-40 mb-20 w-3/4">
-        <span className="text-[54px] font-bold tracking-tighter">
-          AI가 설계한 루틴 AI가 설계한 루틴 AI가 설계한 루틴 AI가 설계한 루틴
-          AI가 설계한 루틴 AI가 설계한 루틴
-        </span>
+        <TypingAnimation
+          startOnView
+          words={[
+            "AI가 설계한 루틴 AI가 설계한 루틴 AI가 설계한 루틴 AI가 설계한 루틴",
+          ]}
+          typeSpeed={50}
+          className="text-[54px] font-bold tracking-tighter"
+        />
       </div>
 
       <div className="mt-52 flex flex-col gap-6">
@@ -306,6 +321,7 @@ export default function Home() {
               animation="slideLeft"
               by="character"
               className="text-muted-foreground"
+              viewport={{ amount: 0.8 }}
             >
               내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
             </TextAnimate>
@@ -325,6 +341,7 @@ export default function Home() {
               animation="slideLeft"
               by="character"
               className="text-muted-foreground"
+              viewport={{ amount: 0.8 }}
             >
               내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
             </TextAnimate>
@@ -344,6 +361,7 @@ export default function Home() {
               animation="slideLeft"
               by="character"
               className="text-muted-foreground"
+              viewport={{ amount: 0.8 }}
             >
               내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
             </TextAnimate>
@@ -357,7 +375,7 @@ export default function Home() {
           </div>
         </div>
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
-          <Marquee className="[--duration:20s]">
+          <Marquee className="items-start [--duration:20s]">
             {firstRow.map((review) => (
               <ReviewCard key={review.username} {...review} />
             ))}

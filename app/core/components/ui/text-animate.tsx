@@ -4,7 +4,7 @@ import {
   type Variants,
   motion,
 } from "motion/react";
-import { type ElementType, memo } from "react";
+import { type ElementType, memo, useMemo } from "react";
 
 import { cn } from "~/core/lib/utils";
 
@@ -320,7 +320,7 @@ const TextAnimateBase = ({
   accessible = true,
   ...props
 }: TextAnimateProps) => {
-  const MotionComponent = motion.create(Component);
+  const MotionComponent = useMemo(() => motion.create(Component), [Component]);
 
   let segments: string[] = [];
   switch (by) {
@@ -393,7 +393,7 @@ const TextAnimateBase = ({
         animate={startOnView ? undefined : "show"}
         exit="exit"
         className={cn("whitespace-pre-wrap", className)}
-        viewport={{ once }}
+        viewport={{ once, ...props.viewport }}
         aria-label={accessible ? children : undefined}
         {...props}
       >

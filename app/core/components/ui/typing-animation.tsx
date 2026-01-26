@@ -37,9 +37,13 @@ export function TypingAnimation({
   cursorStyle = "line",
   ...props
 }: TypingAnimationProps) {
-  const MotionComponent = motion.create(Component, {
-    forwardMotionProps: true,
-  });
+  const MotionComponent = useMemo(
+    () =>
+      motion.create(Component, {
+        forwardMotionProps: true,
+      }),
+    [Component],
+  );
 
   const [displayedText, setDisplayedText] = useState<string>("");
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -47,7 +51,7 @@ export function TypingAnimation({
   const [phase, setPhase] = useState<"typing" | "pause" | "deleting">("typing");
   const elementRef = useRef<HTMLElement | null>(null);
   const isInView = useInView(elementRef as React.RefObject<Element>, {
-    amount: 0.3,
+    amount: 0.1,
     once: true,
   });
 
@@ -135,12 +139,7 @@ export function TypingAnimation({
     currentCharIndex >= currentWordGraphemes.length &&
     phase !== "deleting";
 
-  const shouldShowCursor =
-    showCursor &&
-    !isComplete &&
-    (hasMultipleWords ||
-      loop ||
-      currentCharIndex < currentWordGraphemes.length);
+  const shouldShowCursor = showCursor;
 
   const getCursorChar = () => {
     switch (cursorStyle) {
@@ -157,7 +156,10 @@ export function TypingAnimation({
   return (
     <MotionComponent
       ref={elementRef}
-      className={cn("leading-[5rem] tracking-[-0.02em]", className)}
+      className={cn(
+        "inline-block leading-[5rem] tracking-[-0.02em]",
+        className,
+      )}
       {...props}
     >
       {displayedText}
@@ -168,6 +170,11 @@ export function TypingAnimation({
           {getCursorChar()}
         </span>
       )}
+      <span className="invisible select-none" aria-hidden="true">
+        {Array.from(wordsToAnimate[currentWordIndex] || "")
+          .slice(currentCharIndex)
+          .join("")}
+      </span>
     </MotionComponent>
   );
 }
