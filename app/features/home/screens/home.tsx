@@ -28,6 +28,8 @@ import { TypingAnimation } from "~/core/components/ui/typing-animation";
 import i18next from "~/core/lib/i18next.server";
 import { cn } from "~/core/lib/utils";
 
+import { PricingSection } from "../components/pricing-section";
+
 /**
  * Meta function for setting page metadata
  *
@@ -166,11 +168,13 @@ export default function Home() {
       >
         <div className="flex flex-row items-center gap-2">
           <img
-            className="rounded-full"
+            className="rounded-full select-none"
             width="32"
             height="32"
             alt=""
             src={img}
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
           />
           <div className="flex flex-col">
             <figcaption className="text-sm font-medium dark:text-white">
@@ -302,14 +306,14 @@ export default function Home() {
 
       {/* 기능 섹션 */}
 
-      <div className="mt-40 mb-20 w-3/4">
+      <div className="mt-40 w-3/4">
         <TypingAnimation
           startOnView
           words={[
-            "리치루틴은 방대한 데이터 속의 소음을 제거하고, 오직 당신의 자산을 불릴 핵심 시그널만 추출합니다.",
+            "리치루틴은 방대한 데이터 속의 소음을 제거하고, 오직 당신의 자산을 불릴 핵심 시그널만 포착합니다.",
           ]}
           typeSpeed={50}
-          className="text-[54px] font-bold tracking-tighter"
+          className="text-[52px] font-bold tracking-tighter"
         />
       </div>
 
@@ -374,7 +378,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
+        <div className="relative mt-52 flex w-full flex-col items-center justify-center overflow-hidden">
           <Marquee className="items-start [--duration:20s]">
             {firstRow.map((review) => (
               <ReviewCard key={review.username} {...review} />
@@ -383,6 +387,8 @@ export default function Home() {
           <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r"></div>
           <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l"></div>
         </div>
+        {/* 가격비교 섹션 */}
+        <PricingSection />
       </div>
     </>
   );
