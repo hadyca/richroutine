@@ -104,7 +104,7 @@ export function PricingSection() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="mb-4 flex items-center gap-2">
                 <h3 className="text-sm font-medium">PRO</h3>
@@ -118,7 +118,7 @@ export function PricingSection() {
                   /월
                 </span>
                 <span className="text-muted-foreground ml-2 text-lg font-medium whitespace-pre-line line-through md:text-xl">
-                  19,000원
+                  14,900원
                 </span>
               </div>
 

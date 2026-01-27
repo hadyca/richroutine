@@ -201,19 +201,6 @@ export default function Home() {
                   만나보세요.
                 </h2>
               </div>
-              <div className="mt-2">
-                <Button
-                  size="lg"
-                  className="text-lg font-semibold"
-                  onClick={() => {
-                    document
-                      .getElementById("pricing")
-                      ?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                >
-                  상위 1% 루틴 합류하기
-                </Button>
-              </div>
             </div>
             <Card className="flex items-center justify-center">
               <div className="flex flex-col items-center justify-center">
@@ -265,7 +252,19 @@ export default function Home() {
             </Card>
           </div>
         </div>
-
+        <div className="flex justify-center">
+          <Button
+            size="lg"
+            className="h-16 px-10 text-xl font-semibold"
+            onClick={() => {
+              document
+                .getElementById("pricing")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            상위 1% 루틴 합류하기
+          </Button>
+        </div>
         {/* 로고 섹션 */}
         <div className="flex flex-wrap items-center justify-center gap-32">
           {[
