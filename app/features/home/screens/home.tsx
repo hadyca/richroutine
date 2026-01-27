@@ -105,46 +105,21 @@ export default function Home() {
   // Get the translation function for the current locale
   const { t } = useTranslation();
 
-  const reviews = [
+  const REVIEWS = [
     {
       name: "이개토",
       username: "스튜디오 사업가",
-      body: "워렌 버핏은 매일 아침 경제 신문을 본다고 합니다.\n저같은 경우 경제에 무지해 어디서 어떻게 시작해야 할지 몰라 속는셈치고 구독하기 시작하였는데, 경제 전반에 대한 내용들이 알기 쉽게 잘 정리되어 있네요.\n\n특히나 보유중인 종목 등록 후 내 종목에 미치는 영향까지 알려주니 심적으로 안정이 됩니다! \n리치루틴 가즈아~",
+      body: "워렌 버핏은 매일 아침 경제 신문을 본다고 합니다.\n저같은 경우 경제에 무지해 어디서 어떻게 시작해야 할지 몰라 속는셈치고 구독하기 시작하였는데, 경제 전반에 대한 내용들이 알기 쉽게 잘 정리되어 있네요.\n특히나 보유중인 종목 등록 후 내 종목에 미치는 영향까지 알려주니 심적으로 안정이 됩니다! \n리치루틴 가즈아~",
       img: "/lee.jpg",
     },
     {
-      name: "Jill",
-      username: "@jill",
-      body: "I don't know what to say. I'm speechless. This is amazing.",
-      img: "https://avatar.vercel.sh/jill",
-    },
-    {
-      name: "John",
-      username: "@john",
-      body: "I'm at a loss for words. This is amazing. I love it.",
-      img: "https://avatar.vercel.sh/john",
-    },
-    {
-      name: "Jane",
-      username: "@jane",
-      body: "I'm at a loss for words. This is amazing. I love it.",
-      img: "https://avatar.vercel.sh/jane",
-    },
-    {
-      name: "Jenny",
-      username: "@jenny",
-      body: "I'm at a loss for words. This is amazing. I love it.",
-      img: "https://avatar.vercel.sh/jenny",
-    },
-    {
-      name: "James",
-      username: "@james",
-      body: "I'm at a loss for words. This is amazing. I love it.",
-      img: "https://avatar.vercel.sh/james",
+      name: "KB PARK",
+      username: "전업 트레이더",
+      body: "RichRoutine is highly practical as it allows me to instantly check news directly related to the stocks I invest in. It significantly reduces the time spent on information analysis by filtering only the issues that impact my portfolio from the vast sea of economic news. \nMoreover, by providing the context of issues alongside investment perspectives, it helps minimize unnecessary emotional judgment. I highly recommend this service for its positive impact on making more stable and rational investment decisions.",
+      img: "/PARK.jpg",
     },
   ];
 
-  const firstRow = reviews.slice(0, reviews.length / 2);
   const ReviewCard = ({
     img,
     name,
@@ -168,9 +143,7 @@ export default function Home() {
       >
         <div className="flex flex-row items-center gap-2">
           <img
-            className="rounded-full select-none"
-            width="32"
-            height="32"
+            className="size-8 rounded-full object-cover select-none"
             alt=""
             src={img}
             draggable={false}
@@ -229,8 +202,16 @@ export default function Home() {
                 </h2>
               </div>
               <div className="mt-2">
-                <Button size="lg" className="text-lg font-semibold">
-                  무료로 시작하기
+                <Button
+                  size="lg"
+                  className="text-lg font-semibold"
+                  onClick={() => {
+                    document
+                      .getElementById("pricing")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  상위 1% 루틴 합류하기
                 </Button>
               </div>
             </div>
@@ -380,7 +361,7 @@ export default function Home() {
         </div>
         <div className="relative mt-52 flex w-full flex-col items-center justify-center overflow-hidden">
           <Marquee className="items-start [--duration:20s]">
-            {firstRow.map((review) => (
+            {REVIEWS.map((review) => (
               <ReviewCard key={review.username} {...review} />
             ))}
           </Marquee>
