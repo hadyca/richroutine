@@ -13,7 +13,6 @@
  * This modular approach allows for easy addition or removal of authentication methods
  * without modifying the main authentication screens.
  */
-import { LockIcon, MailIcon } from "lucide-react";
 import { Link } from "react-router";
 
 import { Button } from "~/core/components/ui/button";

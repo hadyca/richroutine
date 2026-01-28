@@ -107,4 +107,11 @@ export default [
   ]),
 
   ...prefix("/legal", [route("/:slug", "features/legal/screens/policy.tsx")]),
+
+  ...prefix("/checkout", [
+    layout("features/checkout/layouts/checkout.layout.tsx", [
+      route("/standard", "features/checkout/screens/standard.tsx"),
+      route("/pro", "features/checkout/screens/pro.tsx"),
+    ]),
+  ]),
 ] satisfies RouteConfig;

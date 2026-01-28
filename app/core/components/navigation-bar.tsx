@@ -18,7 +18,7 @@
  */
 import { CogIcon, HomeIcon, LogOutIcon, MenuIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 import LangSwitcher from "./lang-switcher";
 import ThemeSwitcher from "./theme-switcher";
@@ -252,7 +252,7 @@ export function NavigationBar({
         {/* Desktop navigation menu (hidden on mobile) */}
         <div className="hidden h-full items-center gap-5 md:flex">
           {/* Main navigation links */}
-          <Link
+          {/* <Link
             to="/payments/checkout"
             viewTransition
             className="text-muted-foreground hover:text-foreground text-sm transition-colors"
@@ -260,7 +260,7 @@ export function NavigationBar({
             구독
           </Link>
 
-          <Separator orientation="vertical" />
+          <Separator orientation="vertical" /> */}
 
           {/* Settings, theme switcher, and language switcher */}
           <Actions />
@@ -291,11 +291,11 @@ export function NavigationBar({
           <MenuIcon />
         </SheetTrigger>
         <SheetContent>
-          <SheetHeader>
+          {/* <SheetHeader>
             <SheetClose asChild>
               <Link to="/payments/checkout">구독</Link>
             </SheetClose>
-          </SheetHeader>
+          </SheetHeader> */}
           {loading ? (
             <div className="flex items-center">
               <div className="bg-muted-foreground h-4 w-24 animate-pulse rounded-full" />

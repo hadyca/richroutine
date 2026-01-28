@@ -1,30 +1,12 @@
 import { Check } from "lucide-react";
 import { motion } from "motion/react";
+import { Link } from "react-router";
 
 import { Badge } from "~/core/components/ui/badge";
 import { Button } from "~/core/components/ui/button";
 import { Card } from "~/core/components/ui/card";
 import { ShineBorder } from "~/core/components/ui/shine-border";
-
-const PRICING_PLANS = [
-  {
-    features: [
-      { text: "국내/외 증시 및 부동산 핵심 뉴스 요약" },
-      { text: "주요 지표 요약" },
-      { text: "메일링 서비스" },
-    ],
-  },
-  {
-    features: [
-      { text: "국내/외 증시 및 부동산 핵심 뉴스 요약" },
-      { text: "주요 지표 요약" },
-      { text: "메일링 서비스" },
-      { text: "뉴스 데이터 기반 종목별 영향력 요약" },
-      { text: "웹 대시보드 FULL 접근 권한" },
-      { text: "설정한 종목의 변동성이 클 때 긴급 요약 이메일 알림" },
-    ],
-  },
-];
+import { PRICING_PLANS } from "~/core/constants/pricing";
 
 export function PricingSection() {
   return (
@@ -47,26 +29,28 @@ export function PricingSection() {
         </motion.div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* 첫번째 pricing */}
-          <Card className="h-full">
+          <Card className="flex min-h-[520px] flex-col md:h-full">
             <motion.div
-              className="flex h-full flex-col rounded-2xl p-6"
+              className="flex flex-1 flex-col rounded-2xl p-6"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h3 className="mb-4 text-sm font-medium">STANDARD</h3>
+              <h3 className="mb-4 text-sm font-medium">
+                {PRICING_PLANS[0].name}
+              </h3>
 
               <div className="mb-2">
-                <span className="text-3xl leading-tight font-semibold whitespace-pre-line md:text-4xl">
-                  무료
+                <span className="text-3xl font-semibold whitespace-pre-line md:text-4xl">
+                  {PRICING_PLANS[0].price}
                 </span>
               </div>
 
-              <p className="mb-6 text-xs whitespace-pre-line md:text-sm">
-                매일 아침, 핵심 정보만 가볍게 받아보세요
+              <p className="text-muted-foreground mb-6 text-sm">
+                {PRICING_PLANS[0].description}
               </p>
 
               <ul className="mb-8 flex-1 space-y-3">
@@ -80,19 +64,22 @@ export function PricingSection() {
                     >
                       <Check size={10} color="#000000" strokeWidth={3} />
                     </div>
-                    <span className="text-muted-foreground text-xs leading-relaxed whitespace-pre-line md:text-sm">
+                    <span className="text-muted-foreground text-sm leading-relaxed whitespace-pre-line">
                       {feature.text}
                     </span>
                   </li>
                 ))}
               </ul>
-              <Button className="text-md font-semibold">
-                기초 루틴 시작하기
-              </Button>
+              <Link to="/checkout/standard" viewTransition>
+                <Button className="text-md w-full font-semibold" size="lg">
+                  기초 루틴 시작하기
+                </Button>
+              </Link>
             </motion.div>
           </Card>
+
           {/* 두번째 pricing */}
-          <Card className="relative h-full overflow-hidden">
+          <Card className="relative flex min-h-[520px] flex-col overflow-hidden md:h-full">
             <ShineBorder
               className="absolute inset-0 z-0"
               borderWidth={2}
@@ -100,14 +87,14 @@ export function PricingSection() {
               shineColor={["#2563EB", "#10B981", "#3B82F6"]}
             />
             <motion.div
-              className="relative z-10 flex h-full flex-col rounded-2xl p-6"
+              className="relative z-10 flex flex-1 flex-col rounded-2xl p-6"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="mb-4 flex items-center gap-2">
-                <h3 className="text-sm font-medium">PRO</h3>
+                <h3 className="text-sm font-medium">{PRICING_PLANS[1].name}</h3>
                 <Badge variant="destructive">Event</Badge>
               </div>
               <div className="mb-2">
@@ -118,12 +105,12 @@ export function PricingSection() {
                   /월
                 </span>
                 <span className="text-muted-foreground ml-2 text-lg font-medium whitespace-pre-line line-through md:text-xl">
-                  14,900원
+                  {PRICING_PLANS[1].price}
                 </span>
               </div>
 
-              <p className="mb-6 text-xs whitespace-pre-line md:text-sm">
-                압도적인 정보력으로 투자의 차이를 만드세요
+              <p className="text-muted-foreground mb-6 text-sm">
+                {PRICING_PLANS[1].description}
               </p>
 
               <ul className="mb-8 flex-1 space-y-3">
@@ -137,15 +124,17 @@ export function PricingSection() {
                     >
                       <Check size={10} color="#000000" strokeWidth={3} />
                     </div>
-                    <span className="text-muted-foreground text-xs leading-relaxed whitespace-pre-line md:text-sm">
+                    <span className="text-muted-foreground text-sm leading-relaxed whitespace-pre-line">
                       {feature.text}
                     </span>
                   </li>
                 ))}
               </ul>
-              <Button className="text-md font-semibold">
-                지금 PRO 시작하기
-              </Button>
+              <Link to="/checkout/pro" viewTransition>
+                <Button className="text-md w-full font-semibold" size="lg">
+                  지금 PRO 시작하기
+                </Button>
+              </Link>
             </motion.div>
           </Card>
         </div>

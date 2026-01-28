@@ -166,10 +166,10 @@ export default function Home() {
   return (
     <>
       {/* 히어로 섹션 */}
-      <section className="flex h-[calc(100vh-300px)] flex-col justify-between">
+      <section className="flex min-h-[calc(100vh-300px)] flex-col justify-between py-10 md:py-0">
         <div className="flex items-center justify-center">
-          <div className="grid w-full grid-cols-2">
-            <div className="flex flex-col gap-8">
+          <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 md:gap-8">
+            <div className="flex flex-col items-center gap-8 text-center md:items-start md:text-left">
               <div className="group relative flex w-fit items-center justify-center rounded-full px-4 py-1.5 shadow-[inset_0_-8px_10px_#8fdfff1f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#8fdfff3f]">
                 <span
                   className={cn(
@@ -191,10 +191,10 @@ export default function Home() {
               </div>
 
               <div className="flex flex-col gap-3">
-                <h1 className="text-5xl font-extrabold tracking-tight lg:text-7xl">
+                <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl lg:text-7xl">
                   <AuroraText>리치루틴</AuroraText>
                 </h1>
-                <h2 className="text-muted-foreground mt-3 text-xl tracking-tight">
+                <h2 className="text-muted-foreground mt-3 text-lg tracking-tight md:text-xl">
                   상위 1% 투자자의 루틴은 아침부터 시작됩니다.
                   <br />
                   미국/국내 주식부터 부동산까지, AI가 요약한 뉴스를 쉽게
@@ -202,10 +202,10 @@ export default function Home() {
                 </h2>
               </div>
             </div>
-            <Card className="flex items-center justify-center">
+            <Card className="flex items-center justify-center p-6 md:p-0">
               <div className="flex flex-col items-center justify-center">
                 <div className="flex w-full max-w-sm flex-col gap-4">
-                  <span className="text-center text-4xl font-semibold tracking-tight">
+                  <span className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
                     2026년 회원수 목표
                   </span>
                   <div className="flex flex-col gap-2">
@@ -252,21 +252,21 @@ export default function Home() {
             </Card>
           </div>
         </div>
-        <div className="flex justify-center">
+        <div className="mt-12 flex justify-center md:mt-0">
           <Button
             size="lg"
-            className="h-16 px-10 text-xl font-semibold"
+            className="h-14 px-8 text-lg font-semibold md:h-16 md:px-10 md:text-xl"
             onClick={() => {
               document
                 .getElementById("pricing")
-                ?.scrollIntoView({ behavior: "smooth" });
+                ?.scrollIntoView({ behavior: "instant" });
             }}
           >
             상위 1% 루틴 합류하기
           </Button>
         </div>
         {/* 로고 섹션 */}
-        <div className="flex flex-wrap items-center justify-center gap-32">
+        <div className="mt-20 flex flex-wrap items-center justify-center gap-8 md:mt-0 md:gap-32">
           {[
             "/naver-logo.svg",
             "/Yahoo!_Finance_logo.svg",
@@ -285,80 +285,91 @@ export default function Home() {
       </section>
 
       {/* 기능 섹션 */}
-
-      <div className="mt-40 w-3/4">
+      <div className="mt-24 w-full md:mt-40 md:w-3/4">
         <TypingAnimation
           startOnView
           words={[
             "리치루틴은 방대한 데이터 속의 소음을 제거하고, 오직 당신의 자산을 불릴 핵심 시그널만 포착합니다.",
           ]}
           typeSpeed={50}
-          className="text-[52px] font-bold tracking-tighter"
+          className="text-3xl font-bold tracking-tighter md:text-[52px]"
         />
       </div>
 
-      <div className="mt-52 flex flex-col gap-6">
-        <div className="grid grid-cols-3">
-          <div className="col-span-1 flex flex-col justify-center">
-            <h2 className="text-[42px] font-semibold tracking-tight">제목</h2>
+      <div className="mt-32 flex flex-col gap-12 md:mt-52 md:gap-24">
+        {/* 첫 번째 기능 */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="col-span-1 flex flex-col justify-center text-center md:text-left">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-[42px]">
+              제목
+            </h2>
             <TextAnimate
               animation="slideLeft"
               by="character"
-              className="text-muted-foreground"
+              className="text-muted-foreground mt-4"
               viewport={{ amount: 0.8 }}
             >
               내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
             </TextAnimate>
           </div>
-          <div className="col-span-2 flex items-center justify-end pl-10">
+          <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
             <img
               src="/routine-lifestyle.png"
               alt="Routine Lifestyle"
-              className="border-border/40 aspect-[736/750] w-full max-w-[736px] rounded-[2rem] border object-cover"
+              className="border-border/40 aspect-[736/750] w-full max-w-[736px] rounded-2xl border object-cover md:rounded-[2rem]"
             />
           </div>
         </div>
-        <div className="grid grid-cols-3">
-          <div className="col-span-1 flex flex-col justify-center">
-            <h2 className="text-[42px] font-semibold tracking-tight">제목</h2>
+
+        {/* 두 번째 기능 */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="col-span-1 flex flex-col justify-center text-center md:text-left">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-[42px]">
+              제목
+            </h2>
             <TextAnimate
               animation="slideLeft"
               by="character"
-              className="text-muted-foreground"
+              className="text-muted-foreground mt-4"
               viewport={{ amount: 0.8 }}
             >
               내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
             </TextAnimate>
           </div>
-          <div className="col-span-2 flex items-center justify-end pl-10">
+          <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
             <img
               src="/routine-lifestyle.png"
               alt="Routine Lifestyle"
-              className="border-border/40 aspect-[736/750] w-full max-w-[736px] rounded-[2rem] border object-cover"
+              className="border-border/40 aspect-[736/750] w-full max-w-[736px] rounded-2xl border object-cover md:rounded-[2rem]"
             />
           </div>
         </div>
-        <div className="grid grid-cols-3">
-          <div className="col-span-1 flex flex-col justify-center">
-            <h2 className="text-[42px] font-semibold tracking-tight">제목</h2>
+
+        {/* 세 번째 기능 */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="col-span-1 flex flex-col justify-center text-center md:text-left">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-[42px]">
+              제목
+            </h2>
             <TextAnimate
               animation="slideLeft"
               by="character"
-              className="text-muted-foreground"
+              className="text-muted-foreground mt-4"
               viewport={{ amount: 0.8 }}
             >
               내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
             </TextAnimate>
           </div>
-          <div className="col-span-2 flex items-center justify-end pl-10">
+          <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
             <img
               src="/routine-lifestyle.png"
               alt="Routine Lifestyle"
-              className="border-border/40 aspect-[736/750] w-full max-w-[736px] rounded-[2rem] border object-cover"
+              className="border-border/40 aspect-[736/750] w-full max-w-[736px] rounded-2xl border object-cover md:rounded-[2rem]"
             />
           </div>
         </div>
-        <div className="relative mt-52 flex w-full flex-col items-center justify-center overflow-hidden">
+
+        <div className="relative mt-32 flex w-full flex-col items-center justify-center overflow-hidden md:mt-52">
           <Marquee className="items-start [--duration:20s]">
             {REVIEWS.map((review) => (
               <ReviewCard key={review.username} {...review} />
