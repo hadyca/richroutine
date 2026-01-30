@@ -153,7 +153,7 @@ const data = {
     },
     {
       name: "계정",
-      url: "/dashboard/account",
+      url: "/account/edit",
       icon: UserIcon,
     },
   ],

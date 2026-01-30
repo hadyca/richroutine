@@ -250,7 +250,7 @@ export function NavigationBar({
         </Link>
 
         {/* Desktop navigation menu (hidden on mobile) */}
-        <div className="flex h-full items-center gap-5">
+        <div className="hidden h-full items-center gap-5 md:flex">
           {/* Main navigation links */}
           {/* <Link
             to="/payments/checkout"
@@ -287,7 +287,7 @@ export function NavigationBar({
         </div>
 
         {/* Mobile menu trigger (hidden on desktop) */}
-        {/* <SheetTrigger className="size-6 md:hidden">
+        <SheetTrigger className="size-6 md:hidden">
           <MenuIcon />
         </SheetTrigger>
         <SheetContent>
@@ -298,13 +298,9 @@ export function NavigationBar({
           ) : (
             <SheetFooter>
               {name ? (
-                <div className="grid grid-cols-3">
-                  <div className="col-span-2 flex w-full justify-between">
-                    <Actions />
-                  </div>
-                  <div className="flex justify-end">
-                    <UserMenu name={name} email={email} avatarUrl={avatarUrl} />
-                  </div>
+                <div className="flex w-full items-center justify-end gap-5">
+                  <Actions />
+                  <UserMenu name={name} email={email} avatarUrl={avatarUrl} />
                 </div>
               ) : (
                 <div className="flex flex-col gap-5">
@@ -318,7 +314,7 @@ export function NavigationBar({
               )}
             </SheetFooter>
           )}
-        </SheetContent> */}
+        </SheetContent>
       </div>
     </nav>
   );

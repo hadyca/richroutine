@@ -8,6 +8,7 @@ import { Badge } from "~/core/components/ui/badge";
 import { Button } from "~/core/components/ui/button";
 import { Card } from "~/core/components/ui/card";
 import { Input } from "~/core/components/ui/input";
+import { Label } from "~/core/components/ui/label";
 import { ShineBorder } from "~/core/components/ui/shine-border";
 import { PRICING_PLANS } from "~/core/constants/pricing";
 
@@ -116,7 +117,7 @@ export default function StandardCheckout() {
 
                 <div className="my-6 border-t" />
 
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <label className="font-semibold">쿠폰 코드</label>
                   <div className="flex gap-2">
                     <Input
@@ -128,6 +129,16 @@ export default function StandardCheckout() {
                     <Button variant="outline" className="h-10 shrink-0">
                       적용
                     </Button>
+                  </div>
+                </div> */}
+
+                <div className="space-y-2">
+                  <Label className="flex flex-col items-start gap-1">
+                    쿠폰 코드
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input placeholder="코드를 입력하세요" />
+                    <Button variant="outline">적용</Button>
                   </div>
                 </div>
 
@@ -141,7 +152,7 @@ export default function StandardCheckout() {
               <Button
                 onClick={handleSubscribe}
                 size="lg"
-                className="shadow-primary/20 mt-8 h-14 w-full text-lg font-bold shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="mt-8 h-14 w-full text-lg font-bold"
               >
                 구독하기
               </Button>

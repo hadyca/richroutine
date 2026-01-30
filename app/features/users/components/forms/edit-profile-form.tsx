@@ -59,8 +59,7 @@ export default function EditProfileForm({
     >
       <Card className="justify-between">
         <CardHeader>
-          <CardTitle>Edit profile</CardTitle>
-          <CardDescription>Manage your profile information.</CardDescription>
+          <CardTitle>프로필 수정</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex w-full flex-col gap-7">
@@ -69,7 +68,7 @@ export default function EditProfileForm({
                 htmlFor="avatar"
                 className="flex flex-col items-start gap-2"
               >
-                <span>Avatar</span>
+                <span>프로필 사진</span>
                 <Avatar className="size-24">
                   {avatar ? <AvatarImage src={avatar} alt="Avatar" /> : null}
                   <AvatarFallback>
@@ -115,7 +114,7 @@ export default function EditProfileForm({
                 defaultChecked={marketingConsent}
               />
               <Label htmlFor="marketingConsent">
-                Consent to marketing emails
+                마케팅 정보 수신 동의 (선택)
               </Label>
             </div>
             {fetcher.data &&

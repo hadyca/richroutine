@@ -110,11 +110,10 @@ export default function StandardCheckout() {
                   <span className="text-primary text-2xl font-bold">0원</span>
                 </div>
               </div>
-
               <Button
                 onClick={handleSubscribe}
                 size="lg"
-                className="shadow-primary/20 mt-8 h-14 w-full text-lg font-bold shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="mt-8 h-14 w-full text-lg font-bold"
               >
                 구독하기
               </Button>

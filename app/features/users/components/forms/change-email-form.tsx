@@ -83,7 +83,7 @@ export default function ChangeEmailForm({ email }: { email: string }) {
             disabled={fetcher.state === "submitting"}
           />
           {fetcher.data && "success" in fetcher.data && fetcher.data.success ? (
-            <FormSuccess message="Email update process started. Please check your old email for a verification link." />
+            <FormSuccess message="이메일이 성공적으로 변경되었습니다. 새로운 이메일 주소의 수신함을 확인해 주세요." />
           ) : null}
           {fetcher.data && "error" in fetcher.data && fetcher.data.error ? (
             <FormErrors errors={[fetcher.data.error]} />

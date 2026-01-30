@@ -11,7 +11,6 @@
  * - Profile data updates in both auth and profiles tables
  * - Comprehensive error handling
  */
-
 import type { Route } from "./+types/edit-profile";
 
 import { data } from "react-router";
@@ -60,7 +59,7 @@ const schema = z.object({
 export async function action({ request }: Route.ActionArgs) {
   // Create a server-side Supabase client with the user's session
   const [client] = makeServerClient(request);
-  
+
   // Get the authenticated user's information
   const {
     data: { user },
@@ -70,12 +69,12 @@ export async function action({ request }: Route.ActionArgs) {
   if (request.method !== "POST") {
     return data(null, { status: 405 }); // Method Not Allowed
   }
-  
+
   // Ensure user is authenticated
   if (!user) {
     return data(null, { status: 401 }); // Unauthorized
   }
-  
+
   // Extract and validate form data
   const formData = await request.formData();
   const {
@@ -83,16 +82,16 @@ export async function action({ request }: Route.ActionArgs) {
     data: validData,
     error,
   } = schema.safeParse(Object.fromEntries(formData));
-  
+
   // Return validation errors if any
   if (!success) {
     return data({ fieldErrors: error.flatten().fieldErrors }, { status: 400 });
   }
-  
+
   // Get current user profile to determine existing avatar URL
   const profile = await getUserProfile(client, { userId: user.id });
   let avatarUrl = profile?.avatar_url || null;
-  
+
   // Handle avatar image upload if a valid file was provided
   if (
     validData.avatar &&
@@ -107,19 +106,19 @@ export async function action({ request }: Route.ActionArgs) {
       .upload(user.id, validData.avatar, {
         upsert: true, // Replace existing avatar if any
       });
-      
+
     // Handle upload errors
     if (uploadError) {
       return data({ error: uploadError.message }, { status: 400 });
     }
-    
+
     // Get public URL for the uploaded avatar
     const {
       data: { publicUrl },
     } = await client.storage.from("avatars").getPublicUrl(user.id);
     avatarUrl = publicUrl;
   }
-  
+
   // Update profile information in the profiles table
   const { error: updateProfileError } = await client
     .from("profiles")
@@ -129,7 +128,7 @@ export async function action({ request }: Route.ActionArgs) {
       avatar_url: avatarUrl,
     })
     .eq("profile_id", user.id);
-    
+
   // Update user metadata in the auth table
   const { error: updateError } = await client.auth.updateUser({
     data: {
@@ -139,12 +138,12 @@ export async function action({ request }: Route.ActionArgs) {
       avatar_url: avatarUrl,
     },
   });
-  
+
   // Handle auth update errors
   if (updateError) {
     return data({ error: updateError.message }, { status: 400 });
   }
-  
+
   // Handle profile update errors
   if (updateProfileError) {
     return data({ error: updateProfileError.message }, { status: 400 });

@@ -86,30 +86,23 @@ export default function SidebarUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
+              <DropdownMenuItem asChild>
+                <Link to="/checkout/pro">
+                  <Sparkles />
+                  Upgrade to Pro
+                </Link>
+
+                {/* todo: 무료가입자만 보이게 바꿔야함*/}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link to="/account/edit" viewTransition>
-                  <UserCircle2Icon />
-                  Account
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/dashboard/payments">
-                  <CreditCard />
-                  Payments
-                </Link>
-              </DropdownMenuItem>
+            {/* todo: 향 후 도입 */}
+            {/* <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Bell />
                 Notifications
               </DropdownMenuItem>
-            </DropdownMenuGroup>
+            </DropdownMenuGroup> */}
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link to="/logout">

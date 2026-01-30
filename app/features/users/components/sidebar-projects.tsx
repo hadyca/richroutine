@@ -42,7 +42,7 @@ export default function SidebarProjects({
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <Link to={item.url}>
+              <Link to={item.url} viewTransition>
                 <item.icon />
                 <span>{item.name}</span>
               </Link>
