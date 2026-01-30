@@ -250,7 +250,7 @@ export function NavigationBar({
         </Link>
 
         {/* Desktop navigation menu (hidden on mobile) */}
-        <div className="hidden h-full items-center gap-5 md:flex">
+        <div className="flex h-full items-center gap-5">
           {/* Main navigation links */}
           {/* <Link
             to="/payments/checkout"
@@ -287,15 +287,10 @@ export function NavigationBar({
         </div>
 
         {/* Mobile menu trigger (hidden on desktop) */}
-        <SheetTrigger className="size-6 md:hidden">
+        {/* <SheetTrigger className="size-6 md:hidden">
           <MenuIcon />
         </SheetTrigger>
         <SheetContent>
-          {/* <SheetHeader>
-            <SheetClose asChild>
-              <Link to="/payments/checkout">구독</Link>
-            </SheetClose>
-          </SheetHeader> */}
           {loading ? (
             <div className="flex items-center">
               <div className="bg-muted-foreground h-4 w-24 animate-pulse rounded-full" />
@@ -323,7 +318,7 @@ export function NavigationBar({
               )}
             </SheetFooter>
           )}
-        </SheetContent>
+        </SheetContent> */}
       </div>
     </nav>
   );

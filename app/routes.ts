@@ -96,14 +96,12 @@ export default [
     ]),
   ]),
 
-  layout("core/layouts/private.layout.tsx", { id: "private-dashboard" }, [
-    layout("features/users/layouts/dashboard.layout.tsx", [
-      ...prefix("/dashboard", [
-        index("features/users/screens/dashboard.tsx"),
-        route("/payments", "features/payments/screens/payments.tsx"),
-      ]),
-      route("/account/edit", "features/users/screens/account.tsx"),
+  layout("features/users/layouts/dashboard.layout.tsx", [
+    ...prefix("/dashboard", [
+      index("features/users/screens/dashboard.tsx"),
+      route("/payments", "features/payments/screens/payments.tsx"),
     ]),
+    route("/account/edit", "features/users/screens/account.tsx"),
   ]),
 
   ...prefix("/legal", [route("/:slug", "features/legal/screens/policy.tsx")]),

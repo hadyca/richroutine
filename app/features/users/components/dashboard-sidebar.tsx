@@ -8,17 +8,22 @@ import {
   FrameIcon,
   GalleryVerticalEndIcon,
   HeartHandshakeIcon,
+  HistoryIcon,
   LayoutDashboardIcon,
   LineChartIcon,
   MapIcon,
   MegaphoneIcon,
+  NewspaperIcon,
   PieChartIcon,
   RocketIcon,
   Settings2Icon,
+  SettingsIcon,
   SquareTerminalIcon,
   Target,
+  UserIcon,
   UsersIcon,
 } from "lucide-react";
+import { Link } from "react-router";
 
 import {
   Sidebar,
@@ -26,6 +31,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  useSidebar,
 } from "~/core/components/ui/sidebar";
 
 import SidebarMain from "./sidebar-main";
@@ -36,9 +42,9 @@ import SidebarUser from "./sidebar-user";
 const data = {
   teams: [
     {
-      name: "SalesForge",
+      name: "하하",
       logo: BuildingIcon,
-      plan: "Enterprise",
+      plan: "hohoho",
     },
     {
       name: "TechCo Solutions",
@@ -136,19 +142,19 @@ const data = {
   ],
   projects: [
     {
-      name: "Sales Team",
-      url: "#",
-      icon: Target,
+      name: "오늘의 뉴스",
+      url: "/dashboard/today-news",
+      icon: NewspaperIcon,
     },
     {
-      name: "Customer Success",
-      url: "#",
-      icon: HeartHandshakeIcon,
+      name: "뉴스 기록",
+      url: "/dashboard/news-history",
+      icon: HistoryIcon,
     },
     {
-      name: "Marketing",
-      url: "#",
-      icon: MegaphoneIcon,
+      name: "계정",
+      url: "/dashboard/account",
+      icon: UserIcon,
     },
   ],
 };
@@ -164,12 +170,14 @@ export default function DashboardSidebar({
   };
 }) {
   return (
-    <Sidebar collapsible="icon" variant="inset" {...props}>
-      <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+    <Sidebar collapsible="offcanvas" variant="inset" {...props}>
+      <SidebarHeader className="ml-2 h-16 justify-center">
+        <Link to="/" className="w-fit">
+          <h1 className="text-lg font-extrabold">RichRoutine</h1>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMain items={data.navMain} />
+        {/* <SidebarMain items={data.navMain} /> */}
         <SidebarProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>

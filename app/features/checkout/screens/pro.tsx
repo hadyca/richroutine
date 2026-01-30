@@ -111,9 +111,7 @@ export default function StandardCheckout() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">결제 주기</span>
-                  <span className="text-foreground font-medium">
-                    매월 (무료)
-                  </span>
+                  <span className="text-foreground font-medium">매월</span>
                 </div>
 
                 <div className="my-6 border-t" />
