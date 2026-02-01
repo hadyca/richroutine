@@ -58,7 +58,7 @@ const schema = z.object({
  */
 export async function action({ request }: Route.ActionArgs) {
   // Create a server-side Supabase client with the user's session
-  const [client] = makeServerClient(request);
+  const [client, headers] = makeServerClient(request);
 
   // Get the authenticated user's information
   const {
@@ -100,11 +100,19 @@ export async function action({ request }: Route.ActionArgs) {
     validData.avatar.size < 1024 * 1024 && // 1MB size limit
     validData.avatar.type.startsWith("image/") // Ensure it's an image file
   ) {
+    // Delete existing files in the user's folder to keep storage clean
+    const { data: files } = await client.storage.from("avatars").list(user.id);
+    if (files && files.length > 0) {
+      await client.storage
+        .from("avatars")
+        .remove(files.map((file) => `${user.id}/${file.name}`));
+    }
+
     // Upload avatar to Supabase Storage
-    const { error: uploadError } = await client.storage
+    const { data: storageData, error: uploadError } = await client.storage
       .from("avatars")
-      .upload(user.id, validData.avatar, {
-        upsert: true, // Replace existing avatar if any
+      .upload(`${user.id}/${Date.now()}`, validData.avatar, {
+        upsert: false,
       });
 
     // Handle upload errors
@@ -115,7 +123,7 @@ export async function action({ request }: Route.ActionArgs) {
     // Get public URL for the uploaded avatar
     const {
       data: { publicUrl },
-    } = await client.storage.from("avatars").getPublicUrl(user.id);
+    } = await client.storage.from("avatars").getPublicUrl(storageData.path);
     avatarUrl = publicUrl;
   }
 
@@ -150,7 +158,10 @@ export async function action({ request }: Route.ActionArgs) {
   }
 
   // Return success response
-  return {
-    success: true,
-  };
+  return data(
+    {
+      success: true,
+    },
+    { headers },
+  );
 }
