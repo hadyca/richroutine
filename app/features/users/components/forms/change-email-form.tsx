@@ -39,12 +39,7 @@ export default function ChangeEmailForm({ email }: { email: string }) {
     >
       <Card className="justify-between">
         <CardHeader>
-          <CardTitle>{email ? "Change email" : "Add email"}</CardTitle>
-          <CardDescription>
-            {email
-              ? "Change your email address."
-              : "Add an email address to your account."}
-          </CardDescription>
+          <CardTitle>{email ? "이메일 변경" : "이메일 추가"}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex w-full flex-col gap-7">
@@ -53,7 +48,7 @@ export default function ChangeEmailForm({ email }: { email: string }) {
                 htmlFor="currentEmail"
                 className="flex flex-col items-start gap-1"
               >
-                Current email
+                현재 이메일
               </Label>
               <Input
                 id="currentEmail"
@@ -69,7 +64,7 @@ export default function ChangeEmailForm({ email }: { email: string }) {
                 htmlFor="email"
                 className="flex flex-col items-start gap-1"
               >
-                New email
+                새로운 이메일
               </Label>
               <Input id="email" name="email" required type="email" />
             </div>
@@ -77,7 +72,7 @@ export default function ChangeEmailForm({ email }: { email: string }) {
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
           <FetcherFormButton
-            label={email ? "Change email" : "Add email"}
+            label={email ? "이메일 변경" : "이메일 추가"}
             className="w-full"
             submitting={fetcher.state === "submitting"}
             disabled={fetcher.state === "submitting"}

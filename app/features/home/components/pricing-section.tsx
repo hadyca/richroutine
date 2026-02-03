@@ -70,7 +70,7 @@ export function PricingSection() {
                   </li>
                 ))}
               </ul>
-              <Link to="/checkout/standard" viewTransition>
+              <Link to="/payments/standard" viewTransition>
                 <Button className="text-md w-full font-semibold" size="lg">
                   기초 루틴 시작하기
                 </Button>
@@ -130,7 +130,7 @@ export function PricingSection() {
                   </li>
                 ))}
               </ul>
-              <Link to="/checkout/pro" viewTransition>
+              <Link to="/payments/pro" viewTransition>
                 <Button className="text-md w-full font-semibold" size="lg">
                   지금 PRO 시작하기
                 </Button>

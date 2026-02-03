@@ -19,11 +19,10 @@ export async function loader({ request }: Route.LoaderArgs) {
   const {
     data: { user },
   } = await client.auth.getUser();
-  const identities = client.auth.getUserIdentities();
+
   const profile = getUserProfile(client, { userId: user!.id });
   return {
     user,
-    identities,
     profile,
   };
 }
@@ -51,7 +50,7 @@ export default function Account({ loaderData }: Route.ComponentProps) {
               <EditProfileForm
                 name={profile.name}
                 marketingConsent={profile.marketing_consent}
-                avatarUrl={profile.avatar_url}
+                avatarUrl={user?.user_metadata.avatar_url || profile.avatar_url}
               />
             );
           }}

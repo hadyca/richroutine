@@ -1,0 +1,264 @@
+import type { Route } from "./+types/today-news";
+
+import {
+  ArrowRight,
+  BarChart3,
+  Calendar,
+  Globe,
+  Info,
+  Lightbulb,
+  Newspaper,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
+
+import { Badge } from "~/core/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/core/components/ui/card";
+import { Separator } from "~/core/components/ui/separator";
+
+export const meta: Route.MetaFunction = () => {
+  return [{ title: `Today's Briefing | ${import.meta.env.VITE_APP_NAME}` }];
+};
+
+export default function TodayNews() {
+  const today = new Date().toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
+  });
+
+  return (
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-6 lg:p-10">
+      {/* Header Section */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-1.5">
+          <div className="text-primary flex items-center gap-2">
+            <Newspaper className="h-5 w-5" />
+            <span className="text-sm font-semibold tracking-wider uppercase">
+              Market Intelligence
+            </span>
+          </div>
+          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+            Today's Briefing
+          </h1>
+          <div className="text-muted-foreground flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            <p className="text-sm">{today}</p>
+          </div>
+        </div>
+        <Badge
+          variant="secondary"
+          className="h-fit px-3 py-1 text-sm font-medium"
+        >
+          <span className="mr-1.5 h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+          AI 분석 완료
+        </Badge>
+      </div>
+
+      <Separator className="bg-border/60" />
+
+      {/* Main News Section */}
+      <div className="space-y-6">
+        <div className="flex items-center gap-2">
+          <Globe className="h-5 w-5 text-blue-500" />
+          <h2 className="text-xl font-bold">
+            미국 증시 및 경제 주요 뉴스 (Top 5)
+          </h2>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {[
+            {
+              id: 1,
+              title: "차기 연준 의장 케빈 워시(Kevin Warsh) 지명 파생 여파",
+              content:
+                "워시 지명자는 과거 양적완화에 비판적이었던 매파적 성향으로 분류되며, 이에 따라 미 국채 10년물 금리가 장중 상승 압력을 받았고 달러 인덱스는 103선을 회복하며 강세를 보이고 있습니다.",
+              sentiment: "negative",
+              tag: "Economic Policy",
+            },
+            {
+              id: 2,
+              title:
+                "빅테크 실적 '옥석 가리기' 심화... 알파벳(GOOGL) 발표 임박",
+              content:
+                "지난주 MSFT와 TSLA가 실적 발표 후 자본지출 우려로 하락한 반면, 메타는 가이던스 상향으로 급등하며 기술주 내 차별화가 진행 중입니다.",
+              sentiment: "neutral",
+              tag: "Earnings",
+            },
+            {
+              id: 3,
+              title: "S&P 500 지수 7,000선 돌파 후 차익 실현 매물 출회",
+              content:
+                "사상 처음으로 7,000포인트를 돌파했으나, 과매수권 진입에 따른 기술적 부담으로 인해 나스닥 선물(NQ)이 장중 1.0% 하락하는 등 강한 조정을 받고 있습니다.",
+              sentiment: "negative",
+              tag: "Market Trend",
+            },
+            {
+              id: 4,
+              title: "비트코인 및 안전자산 급락... 위험회피 심리 확산",
+              content:
+                "비트코인이 8만 달러 선을 내주며 77,000달러대로 하락했고, 금 가격 역시 케빈 워시의 매파적 행보 전망에 따른 달러 강세 여파로 조정을 보였습니다.",
+              sentiment: "negative",
+              tag: "Crypto/Gold",
+            },
+            {
+              id: 5,
+              title:
+                "12월 생산자물가지수(PPI) 예상치 상회... 인플레이션 끈적임",
+              content:
+                "미국 12월 PPI가 전월 대비 +0.5% 기록하며 예상치(+0.2%)를 상회했습니다. 인플레이션 하방 경직성을 시연하며 상반기 금리 인하 중단 가능성을 높이고 있습니다.",
+              sentiment: "negative",
+              tag: "Inflation",
+            },
+          ].map((item) => (
+            <Card
+              key={item.id}
+              className="group border-border/50 hover:border-primary/50 relative overflow-hidden transition-colors"
+            >
+              <CardHeader className="pb-3">
+                <div className="mb-2 flex items-start justify-between">
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] tracking-tighter uppercase"
+                  >
+                    {item.tag}
+                  </Badge>
+                  {item.sentiment === "positive" ? (
+                    <TrendingUp className="h-4 w-4 text-emerald-500" />
+                  ) : item.sentiment === "negative" ? (
+                    <TrendingDown className="h-4 w-4 text-red-500" />
+                  ) : (
+                    <Info className="h-4 w-4 text-slate-400" />
+                  )}
+                </div>
+                <CardTitle className="group-hover:text-primary text-base leading-tight transition-colors">
+                  {item.id}. {item.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground line-clamp-4 text-sm leading-relaxed">
+                  {item.content}
+                </p>
+              </CardContent>
+              <div
+                className={`absolute bottom-0 left-0 h-1 w-full ${
+                  item.sentiment === "positive"
+                    ? "bg-emerald-500"
+                    : item.sentiment === "negative"
+                      ? "bg-red-500"
+                      : "bg-slate-300"
+                }`}
+              />
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      {/* Impact Section */}
+      <div className="mt-4 grid gap-6 lg:grid-cols-2">
+        <Card className="border-blue-100 bg-slate-50/50 shadow-sm dark:border-blue-900 dark:bg-slate-950/50">
+          <CardHeader className="flex flex-row items-center gap-3">
+            <div className="rounded-full bg-blue-100 p-2 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400">
+              <BarChart3 className="h-5 w-5" />
+            </div>
+            <div>
+              <CardTitle>내 관심 종목에 미치는 영향</CardTitle>
+              <CardDescription>
+                알고리즘 기반 포트폴리오 영향 분석
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <div className="bg-background border-border/60 flex flex-col rounded-xl border p-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                    GOOGL
+                  </span>
+                  <Badge
+                    variant="outline"
+                    className="border-red-200 bg-red-50 text-red-600"
+                  >
+                    단기 변동성 높음
+                  </Badge>
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  현재 주가 약 338.53달러. 2월 4일 실적 발표를 앞두고 옵션
+                  변동성이 확대되고 있습니다. 광고 시장 민감도와 규제 이슈로
+                  실적 발표 당일 ±5% 이상의 변동성이 예상됩니다.
+                </p>
+              </div>
+              <div className="bg-background border-border/60 flex flex-col rounded-xl border p-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-lg font-bold">QQQ</span>
+                  <Badge
+                    variant="outline"
+                    className="bg-slate-50 text-slate-600"
+                  >
+                    저항 구간 진입
+                  </Badge>
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  나스닥 100 지수가 26,000선 부근에서 더블탑 패턴을 형성
+                  중입니다. QQQ 주가는 621.87달러로 하락 압력을 받고 있어 실적
+                  시즌 종료 시까지는 보수적인 접근이 필요합니다.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Expert Opinion */}
+        <Card className="bg-primary/5 border-primary/20 flex flex-col shadow-md">
+          <CardHeader className="flex flex-row items-center gap-3">
+            <div className="bg-primary text-primary-foreground rounded-full p-2">
+              <Lightbulb className="h-5 w-5" />
+            </div>
+            <div>
+              <CardTitle>미국 시장 전문가 의견</CardTitle>
+              <CardDescription>리치루틴 전담 분석관 코멘트</CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="flex flex-1 flex-col justify-center">
+            <blockquote className="border-primary border-l-4 py-2 pl-4 text-lg leading-relaxed font-medium italic">
+              "현재는 &apos;기대&apos;가 &apos;증명&apos;으로 바뀌어야 하는
+              구간입니다. 지수가 고점에 위치한 만큼, GOOGL의 경우 실적 쇼크 시
+              하단 지지선인 310달러 선까지 열어두는 방어적 스탠스가 필요하며,
+              QQQ는 분할 매도 후 현금 비중 30% 확보를 권고합니다."
+            </blockquote>
+            <div className="bg-primary/10 mt-8 flex items-center gap-4 rounded-lg p-4">
+              <div className="flex flex-col gap-1">
+                <p className="flex items-center gap-2 text-sm font-bold">
+                  투자 전략 요약 <ArrowRight className="h-3 w-3" />
+                </p>
+                <div className="mt-1 flex flex-wrap gap-2">
+                  <Badge className="bg-primary text-primary-foreground">
+                    현금 비중 30%
+                  </Badge>
+                  <Badge variant="outline" className="bg-background">
+                    방어적 스탠스
+                  </Badge>
+                  <Badge variant="outline" className="bg-background">
+                    분할 매도
+                  </Badge>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="text-muted-foreground mt-6 text-center text-[10px] italic">
+        본 정보는 AI가 수집/요약한 정보로 투자 결과에 대한 법적 책임의 근거로
+        활용될 수 없습니다.
+      </div>
+    </div>
+  );
+}

@@ -92,7 +92,7 @@ function UserMenu({
           <SheetClose asChild>
             <Link to="/dashboard" viewTransition>
               <HomeIcon className="size-4" />
-              Dashboard
+              대시보드
             </Link>
           </SheetClose>
         </DropdownMenuItem>
@@ -102,7 +102,7 @@ function UserMenu({
           <SheetClose asChild>
             <Link to="/logout" viewTransition>
               <LogOutIcon className="size-4" />
-              Log out
+              로그아웃
             </Link>
           </SheetClose>
         </DropdownMenuItem>

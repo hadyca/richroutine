@@ -58,7 +58,7 @@ const schema = z.object({
  */
 export async function action({ request }: Route.ActionArgs) {
   // Create a server-side Supabase client with the user's session
-  const [client, headers] = makeServerClient(request);
+  const [client] = makeServerClient(request);
 
   // Get the authenticated user's information
   const {
@@ -158,10 +158,7 @@ export async function action({ request }: Route.ActionArgs) {
   }
 
   // Return success response
-  return data(
-    {
-      success: true,
-    },
-    { headers },
-  );
+  return data({
+    success: true,
+  });
 }

@@ -34,6 +34,7 @@ import { isTurnstileTokenValid } from "~/core/lib/turnstile.server";
 
 import FormErrors from "../../../core/components/form-error";
 import { SignInButtons } from "../components/auth-login-buttons";
+import { doesUserExist } from "../lib/queries.server";
 
 /**
  * Meta function for the login page
@@ -101,6 +102,15 @@ export async function action({ request }: Route.ActionArgs) {
         },
         success: false,
       },
+      { status: 400 },
+    );
+  }
+
+  const userExists = await doesUserExist(validData.email);
+
+  if (!userExists) {
+    return data(
+      { error: "등록되지 않은 계정입니다. 회원가입 후 이용해 주세요." },
       { status: 400 },
     );
   }

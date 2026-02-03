@@ -5,6 +5,7 @@ import {
   BriefcaseIcon,
   BuildingIcon,
   CommandIcon,
+  CreditCardIcon,
   FrameIcon,
   GalleryVerticalEndIcon,
   HeartHandshakeIcon,
@@ -36,7 +37,6 @@ import {
 
 import SidebarMain from "./sidebar-main";
 import SidebarProjects from "./sidebar-projects";
-import TeamSwitcher from "./sidebar-team-switcher";
 import SidebarUser from "./sidebar-user";
 
 const data = {
@@ -142,6 +142,11 @@ const data = {
   ],
   projects: [
     {
+      name: "대시보드",
+      url: "/dashboard",
+      icon: LayoutDashboardIcon,
+    },
+    {
       name: "오늘의 뉴스",
       url: "/dashboard/today-news",
       icon: NewspaperIcon,
@@ -150,6 +155,11 @@ const data = {
       name: "뉴스 기록",
       url: "/dashboard/news-history",
       icon: HistoryIcon,
+    },
+    {
+      name: "결제내역",
+      url: "/dashboard/payments",
+      icon: CreditCardIcon,
     },
     {
       name: "계정",

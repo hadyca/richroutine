@@ -40,6 +40,7 @@
     "@tosspayments/tosspayments-sdk": "^2.3.4",
     "@vercel/og": "^0.6.5",
     "@vercel/react-router": "^1.1.0",
+    "axios": "^1.13.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
@@ -71,6 +72,7 @@
     "sonner": "^2.0.1",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
+    "yahoo-finance2": "^3.13.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

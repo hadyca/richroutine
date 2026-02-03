@@ -82,28 +82,24 @@ export default [
     ]),
 
     ...prefix("/payments", [
-      route("/checkout", "features/payments/screens/checkout.tsx"),
+      route("/standard", "features/payments/screens/standard.tsx"),
+      route("/pro", "features/payments/screens/pro.tsx"),
       layout("core/layouts/private.layout.tsx", { id: "private-payments" }, [
         route("/success", "features/payments/screens/success.tsx"),
         route("/failure", "features/payments/screens/failure.tsx"),
       ]),
     ]),
   ]),
-
+  // 프라이빗으로 감싸야함
   layout("features/users/layouts/dashboard.layout.tsx", [
     ...prefix("/dashboard", [
       index("features/users/screens/dashboard.tsx"),
+      route("/today-news", "features/news/screens/today-news.tsx"),
+      route("/news-history", "features/news/screens/news-history.tsx"),
       route("/payments", "features/payments/screens/payments.tsx"),
     ]),
     route("/account/edit", "features/users/screens/account.tsx"),
   ]),
 
   ...prefix("/legal", [route("/:slug", "features/legal/screens/policy.tsx")]),
-
-  ...prefix("/checkout", [
-    layout("features/checkout/layouts/checkout.layout.tsx", [
-      route("/standard", "features/checkout/screens/standard.tsx"),
-      route("/pro", "features/checkout/screens/pro.tsx"),
-    ]),
-  ]),
 ] satisfies RouteConfig;
