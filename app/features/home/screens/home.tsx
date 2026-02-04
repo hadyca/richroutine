@@ -270,7 +270,7 @@ export default function Home() {
           {[
             "/naver-logo.svg",
             "/Yahoo!_Finance_logo.svg",
-            "/naver-logo.svg",
+            "/KB_Signature_row_kr_1.png",
             "/Yahoo!_Finance_logo.svg",
             "/naver-logo.svg",
           ].map((logo, idx) => (

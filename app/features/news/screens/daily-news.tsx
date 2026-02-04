@@ -1,9 +1,8 @@
-import type { Route } from "./+types/today-news";
+import type { Route } from "./+types/daily-news";
 
 import {
   ArrowRight,
   BarChart3,
-  Calendar,
   Globe,
   Info,
   Lightbulb,
@@ -11,6 +10,9 @@ import {
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
+import { DateTime } from "luxon";
+import { data, isRouteErrorResponse } from "react-router";
+import { z } from "zod";
 
 import { Badge } from "~/core/components/ui/badge";
 import {
@@ -22,12 +24,72 @@ import {
 } from "~/core/components/ui/card";
 import { Separator } from "~/core/components/ui/separator";
 
-export const meta: Route.MetaFunction = () => {
-  return [{ title: `Today's Briefing | ${import.meta.env.VITE_APP_NAME}` }];
+const paramsSchema = z.object({
+  year: z.coerce.number(),
+  month: z.coerce.number(),
+  day: z.coerce.number(),
+});
+
+export const meta: Route.MetaFunction = ({ params }) => {
+  const date = DateTime.fromObject({
+    year: Number(params.year),
+    month: Number(params.month),
+    day: Number(params.day),
+  })
+    .setZone("Asia/Seoul")
+    .setLocale("ko");
+  return [
+    {
+      title: `오늘의 뉴스 | ${date.toLocaleString(
+        DateTime.DATE_MED,
+      )} | RichRoutine`,
+    },
+  ];
 };
 
-export default function TodayNews() {
-  const today = new Date().toLocaleDateString("ko-KR", {
+export const loader = async ({ params }: Route.LoaderArgs) => {
+  const { success, data: parsedData } = paramsSchema.safeParse(params);
+
+  if (!success) {
+    throw data(
+      {
+        error_code: "invalid_params",
+        message: "Invalid params",
+      },
+      { status: 400 },
+    );
+  }
+  const date = DateTime.fromObject(parsedData).setZone("Asia/Seoul");
+  if (!date.isValid) {
+    throw data(
+      {
+        error_code: "invalid_date",
+        message: "Invalid date",
+      },
+      {
+        status: 400,
+      },
+    );
+  }
+  const today = DateTime.now().setZone("Asia/Seoul").startOf("day");
+  if (date > today) {
+    throw data(
+      {
+        error_code: "future_date",
+        message: "Future date",
+      },
+      { status: 400 },
+    );
+  }
+
+  return { ...parsedData };
+};
+
+export default function TodayNews({ loaderData }: Route.ComponentProps) {
+  // Parse the ISO date string from loader
+  const dateObj = DateTime.fromObject(loaderData).setZone("Asia/Seoul");
+
+  const today = dateObj.setLocale("ko").toLocaleString({
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -35,34 +97,24 @@ export default function TodayNews() {
   });
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-6 lg:p-10">
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 p-6 lg:p-10">
       {/* Header Section */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:justify-between">
         <div className="flex flex-col gap-1.5">
           <div className="text-primary flex items-center gap-2">
-            <Newspaper className="h-5 w-5" />
-            <span className="text-sm font-semibold tracking-wider uppercase">
-              Market Intelligence
-            </span>
+            <Newspaper className="h-7 w-7" />
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+              오늘의 뉴스
+            </h1>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-            Today's Briefing
-          </h1>
-          <div className="text-muted-foreground flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
+
+          <div className="flex items-center gap-2">
             <p className="text-sm">{today}</p>
           </div>
         </div>
-        <Badge
-          variant="secondary"
-          className="h-fit px-3 py-1 text-sm font-medium"
-        >
-          <span className="mr-1.5 h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-          AI 분석 완료
-        </Badge>
       </div>
 
-      <Separator className="bg-border/60" />
+      <Separator />
 
       {/* Main News Section */}
       <div className="space-y-6">
@@ -262,3 +314,17 @@ export default function TodayNews() {
     </div>
   );
 }
+
+// export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+//   if (isRouteErrorResponse(error)) {
+//     return (
+//       <div>
+//         {error.data.message} / {error.data.error_code}
+//       </div>
+//     );
+//   }
+//   if (error instanceof Error) {
+//     return <div>{error.message}</div>;
+//   }
+//   return <div>Unknown error</div>;
+// }

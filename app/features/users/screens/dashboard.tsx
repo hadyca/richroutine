@@ -1,17 +1,7 @@
 import type { Route } from "./+types/dashboard";
 
-import axios from "axios";
-import {
-  Activity,
-  ArrowUpRight,
-  Bell,
-  LayoutDashboard,
-  LineChart,
-  ShieldCheck,
-  Zap,
-} from "lucide-react";
+import { CircleQuestionMark, LayoutDashboard, Zap } from "lucide-react";
 
-import { Badge } from "~/core/components/ui/badge";
 import { Button } from "~/core/components/ui/button";
 import {
   Card,
@@ -20,6 +10,12 @@ import {
   CardHeader,
   CardTitle,
 } from "~/core/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverTrigger,
+} from "~/core/components/ui/popover";
 import { Separator } from "~/core/components/ui/separator";
 
 export const meta: Route.MetaFunction = () => {
@@ -30,87 +26,88 @@ export default function Dashboard() {
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 p-6 lg:p-10">
       {/* Welcome Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:justify-between">
         <div className="flex flex-col gap-1.5">
           <div className="text-primary flex items-center gap-2">
-            <LayoutDashboard className="h-5 w-5" />
-            <span className="text-sm font-semibold tracking-wider uppercase">
-              Control Panel
-            </span>
+            <LayoutDashboard className="h-7 w-7" />
+            <h1 className="text-3xl font-bold tracking-tight">대시보드</h1>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">Main Dashboard</h1>
           <p className="text-muted-foreground text-sm">
-            투자 자산 현황과 실시간 시장 지능을 한눈에 확인하세요.
+            주요 지표 현황과 시장의 흐름을 한눈에 확인하세요.
           </p>
         </div>
       </div>
 
-      <Separator className="bg-border/60" />
+      <Separator />
 
       {/* Hero Stats */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {[
           {
-            label: "VIX (Fear Index)",
+            label: "VIX (미국 공포 지수)",
             value: "15.42",
             change: "+1.24%",
-            icon: Activity,
-            trend: "up",
+            description:
+              "S&P 500 지수 옵션 가격에 기반한 미국 시장 변동성 지수입니다. \n\n20↓(낮음): 시장 낙관 및 안정 구간 \n20~30(보통): 정상적인 변동성 범위 \n30↑(높음): 시장 공포 및 과매도 국면",
           },
           {
-            label: "VKOSPI",
+            label: "VKOSPI (한국 공포 지수)",
             value: "18.25",
             change: "-0.45%",
-            icon: Activity,
-            trend: "down",
+            description:
+              "KOSPI 200 옵션 가격을 바탕으로 산출되는 한국형 공포지수입니다. 국내 시장 참여자들의 불안 심리를 측정하는 척도로 쓰입니다. \n\n20↓(낮음): 시장 낙관 및 안정 구간 \n20~30(보통): 정상적인 변동성 범위 \n30↑(높음): 시장 공포 및 과매도 국면",
           },
           {
-            label: "KB 매수우위지표",
+            label: "KB 부동산 매수우위지표(서울)",
             value: "32.8",
             change: "+2.1",
-            icon: LineChart,
-            trend: "up",
+            description:
+              "부동산 중개업소들이 체감하는 매수·매도세 비중입니다. \n\n100↑: 매수자가 많음 \n100↓: 매도자가 많음",
           },
           {
             label: "구독 등급",
             value: "PRO",
-            change: "Active",
-            icon: ShieldCheck,
-            trend: "neutral",
+            change: "",
+            description:
+              "회원님의 현재 서비스 등급입니다. PRO 등급은 AI 시장 리포트 및 무제한 AI 변동성 시장 분석 기능을 제공합니다.",
           },
         ].map((stat, i) => (
-          <Card
-            key={i}
-            className="border-none bg-slate-50 shadow-none dark:bg-slate-900/40"
-          >
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
-              <span className="text-muted-foreground text-xs font-semibold uppercase">
-                {stat.label}
-              </span>
-              <stat.icon className="text-primary h-4 w-4 opacity-70" />
+          <Card key={i}>
+            <CardHeader className="flex flex-row items-center justify-between pb-2 text-nowrap">
+              <span className="text-sm font-semibold">{stat.label}</span>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <CircleQuestionMark className="h-4 w-4 cursor-help text-slate-400 transition-colors hover:text-slate-600" />
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-80">
+                  <PopoverDescription className="text-xs leading-relaxed whitespace-pre-line">
+                    {stat.description}
+                  </PopoverDescription>
+                </PopoverContent>
+              </Popover>
             </CardHeader>
-            <CardContent className="p-4 pt-0">
+            <CardContent className="pt-0">
               <div className="text-2xl font-bold">{stat.value}</div>
-              <div className="mt-1 flex items-center gap-1.5">
+              <div
+                className={`mt-1 flex items-center ${stat.label.includes("구독 등급") ? "" : "gap-1.5"}`}
+              >
                 <span
-                  className={`text-xs font-bold ${
-                    stat.label.includes("VIX") || stat.label.includes("VKOSPI")
-                      ? stat.trend === "up"
-                        ? "text-red-500" // Risk rising
-                        : stat.trend === "down"
-                          ? "text-emerald-500" // Risk falling
-                          : "text-primary"
-                      : stat.trend === "up"
-                        ? "text-emerald-500"
-                        : stat.trend === "down"
-                          ? "text-red-500"
-                          : "text-primary"
+                  className={`text-sm font-bold ${
+                    stat.change.includes("+")
+                      ? "text-red-500"
+                      : stat.change.includes("-")
+                        ? "text-blue-500"
+                        : "text-primary"
                   }`}
                 >
                   {stat.change}
                 </span>
-                <span className="text-muted-foreground text-[10px] font-medium underline underline-offset-2">
-                  {stat.label.includes("VIX") ? "Real-time" : "vs yesterday"}
+                <span className="text-muted-foreground text-xs font-medium">
+                  {stat.label.includes("구독 등급")
+                    ? "2026-12-31 구독 갱신 예정"
+                    : stat.label.includes("KB 부동산 매수우위지표(서울)")
+                      ? "vs last week"
+                      : "vs yesterday"}
                 </span>
               </div>
             </CardContent>
@@ -120,35 +117,32 @@ export default function Dashboard() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Main Intelligence Card */}
-        <Card className="border-primary/10 from-background to-primary/5 bg-gradient-to-br lg:col-span-2">
+        <Card className="lg:col-span-2">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Zap className="h-5 w-5 fill-amber-500 text-amber-500" />
-                Latest Market Intelligence
+                AI 변동성 시장 분석
               </CardTitle>
             </div>
-            <CardDescription>
-              AI가 분석한 실시간 핵심 시장 변동 정보입니다.
-            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex flex-col gap-4">
               {[
                 {
-                  label: "VIX Summary",
+                  label: "VIX SUMMARY",
                   content:
                     "시장 변동성이 소폭 상승 중이나 여전히 안정권이며, 극단적 공포는 감지되지 않습니다.",
                   color: "bg-blue-500",
                 },
                 {
-                  label: "VKOSPI Summary",
+                  label: "VKOSPI SUMMARY",
                   content:
                     "국내 변동성 지수는 하향 안정화 추세로, 코스피 시장의 하방 경직성이 강화되고 있습니다.",
                   color: "bg-indigo-500",
                 },
                 {
-                  label: "KB 지표 Summary",
+                  label: "KB 지표 SUMMARY",
                   content:
                     "매수 세력이 점진적으로 유입되며 시장 심리가 위축 구간에서 점진적으로 벗어나고 있습니다.",
                   color: "bg-emerald-500",
@@ -157,11 +151,11 @@ export default function Dashboard() {
                 <div key={i} className="flex flex-col gap-2">
                   <div className="flex items-center gap-2">
                     <div className={`h-1.5 w-1.5 rounded-full ${item.color}`} />
-                    <span className="text-[10px] font-bold tracking-tight text-slate-500 uppercase">
+                    <span className="text-xs font-bold tracking-tight text-slate-500">
                       {item.label}
                     </span>
                   </div>
-                  <p className="border-l-2 border-slate-100 pl-3 text-sm leading-relaxed font-medium select-none dark:border-slate-800">
+                  <p className="border-l-2 border-slate-500 pl-3 text-sm leading-relaxed font-medium">
                     {item.content}
                   </p>
                 </div>
@@ -171,7 +165,7 @@ export default function Dashboard() {
         </Card>
 
         {/* Portfolio Watchlist */}
-        <Card className="border-border/50">
+        <Card>
           <CardHeader>
             <CardTitle className="text-lg">My Watchlist</CardTitle>
             <CardDescription>
@@ -179,7 +173,7 @@ export default function Dashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="divide-border/50 divide-y">
+            <div className="divide-border divide-y px-6">
               {[
                 {
                   ticker: "AAPL",
@@ -196,7 +190,7 @@ export default function Dashboard() {
               ].map((item) => (
                 <div
                   key={item.ticker}
-                  className="hover:bg-muted/30 flex cursor-pointer items-center justify-between px-6 py-4 transition-colors"
+                  className="flex items-center justify-between py-4 transition-colors"
                 >
                   <span className="font-bold">{item.ticker}</span>
                   <div className="flex flex-col items-end">

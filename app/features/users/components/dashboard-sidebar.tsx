@@ -148,7 +148,7 @@ const data = {
     },
     {
       name: "오늘의 뉴스",
-      url: "/dashboard/today-news",
+      url: "/dashboard/news/daily",
       icon: NewspaperIcon,
     },
     {

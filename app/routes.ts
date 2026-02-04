@@ -94,7 +94,11 @@ export default [
   layout("features/users/layouts/dashboard.layout.tsx", [
     ...prefix("/dashboard", [
       index("features/users/screens/dashboard.tsx"),
-      route("/today-news", "features/news/screens/today-news.tsx"),
+      route(
+        "/news/daily/:year/:month/:day",
+        "features/news/screens/daily-news.tsx",
+      ),
+      route("/news/:period", "features/news/screens/news-redirection.tsx"),
       route("/news-history", "features/news/screens/news-history.tsx"),
       route("/payments", "features/payments/screens/payments.tsx"),
     ]),
