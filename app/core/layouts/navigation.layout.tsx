@@ -25,8 +25,8 @@ export default function NavigationLayout({ loaderData }: Route.ComponentProps) {
             ) : (
               <NavigationBar
                 name={user.user_metadata.name || "Anonymous"}
-                email={user.email}
-                avatarUrl={user.user_metadata.avatar_url}
+                email={user.email || "dev@dev.com"}
+                avatarUrl={user.user_metadata.avatar_url || ""}
                 loading={false}
               />
             )

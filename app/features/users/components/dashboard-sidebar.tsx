@@ -151,11 +151,11 @@ const data = {
       url: "/dashboard/news/daily",
       icon: NewspaperIcon,
     },
-    {
-      name: "뉴스 기록",
-      url: "/dashboard/news-history",
-      icon: HistoryIcon,
-    },
+    // {
+    //   name: "뉴스 기록",
+    //   url: "/dashboard/news-history",
+    //   icon: HistoryIcon,
+    // },
     {
       name: "결제내역",
       url: "/dashboard/payments",

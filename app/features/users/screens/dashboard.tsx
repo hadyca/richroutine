@@ -167,7 +167,19 @@ export default function Dashboard() {
         {/* Portfolio Watchlist */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">My Watchlist</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">My Watchlist</CardTitle>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <CircleQuestionMark className="h-4 w-4 cursor-help text-slate-400 transition-colors hover:text-slate-600" />
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-80">
+                  <PopoverDescription className="text-xs leading-relaxed whitespace-pre-line">
+                    가격은 마지막 정규장 시간 기준입니다.
+                  </PopoverDescription>
+                </PopoverContent>
+              </Popover>
+            </div>
             <CardDescription>
               오늘의 뉴스에 반영되는 종목입니다.
             </CardDescription>
@@ -179,13 +191,11 @@ export default function Dashboard() {
                   ticker: "AAPL",
                   price: "242.12",
                   change: "+1.2%",
-                  color: "text-emerald-500",
                 },
                 {
                   ticker: "TSLA",
                   price: "182.44",
                   change: "-2.4%",
-                  color: "text-red-500",
                 },
               ].map((item) => (
                 <div
@@ -195,7 +205,9 @@ export default function Dashboard() {
                   <span className="font-bold">{item.ticker}</span>
                   <div className="flex flex-col items-end">
                     <span className="text-sm font-medium">{item.price}</span>
-                    <span className={`text-[10px] font-bold ${item.color}`}>
+                    <span
+                      className={`text-[10px] font-bold ${item.change.includes("+") ? "text-red-500" : "text-blue-500"}`}
+                    >
                       {item.change}
                     </span>
                   </div>

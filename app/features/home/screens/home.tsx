@@ -314,9 +314,16 @@ export default function Home() {
           </div>
           <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
             <img
-              src="/routine-lifestyle.png"
-              alt="Routine Lifestyle"
-              className="border-border/40 aspect-[736/750] w-full max-w-[736px] rounded-2xl border object-cover md:rounded-[2rem]"
+              src="/light-index.png"
+              alt="Index"
+              className="aspect-[3696/720] w-full max-w-[736px] rounded-2xl object-contain md:rounded-[2rem] dark:hidden"
+              style={{ imageRendering: "crisp-edges" }}
+            />
+            <img
+              src="/dark-index.png"
+              alt="Index"
+              className="hidden aspect-[3708/732] w-full max-w-[736px] rounded-2xl object-contain md:rounded-[2rem] dark:block"
+              style={{ imageRendering: "crisp-edges" }}
             />
           </div>
         </div>
@@ -338,9 +345,16 @@ export default function Home() {
           </div>
           <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
             <img
-              src="/routine-lifestyle.png"
-              alt="Routine Lifestyle"
-              className="border-border/40 aspect-[736/750] w-full max-w-[736px] rounded-2xl border object-cover md:rounded-[2rem]"
+              src="/light-analyze.png"
+              alt="Analyze"
+              className="aspect-[3272/1420] w-full max-w-[736px] rounded-2xl object-contain md:rounded-[2rem] dark:hidden"
+              style={{ imageRendering: "crisp-edges" }}
+            />
+            <img
+              src="/dark-analyze.png"
+              alt="Analyze"
+              className="hidden aspect-[3264/1432] w-full max-w-[736px] rounded-2xl object-contain md:rounded-[2rem] dark:block"
+              style={{ imageRendering: "crisp-edges" }}
             />
           </div>
         </div>
@@ -362,9 +376,47 @@ export default function Home() {
           </div>
           <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
             <img
-              src="/routine-lifestyle.png"
-              alt="Routine Lifestyle"
-              className="border-border/40 aspect-[736/750] w-full max-w-[736px] rounded-2xl border object-cover md:rounded-[2rem]"
+              src="/light-daily-news.png"
+              alt="Daily News"
+              className="aspect-[4928/2036] w-full max-w-[736px] rounded-2xl object-contain md:rounded-[2rem] dark:hidden"
+              style={{ imageRendering: "crisp-edges" }}
+            />
+            <img
+              src="/dark-daily-news.png"
+              alt="Daily News"
+              className="hidden aspect-[4940/2064] w-full max-w-[736px] rounded-2xl object-contain md:rounded-[2rem] dark:block"
+              style={{ imageRendering: "crisp-edges" }}
+            />
+          </div>
+        </div>
+
+        {/* 네 번째 기능 */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="col-span-1 flex flex-col justify-center text-center md:text-left">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-[42px]">
+              제목
+            </h2>
+            <TextAnimate
+              animation="slideLeft"
+              by="character"
+              className="text-muted-foreground mt-4"
+              viewport={{ amount: 0.8 }}
+            >
+              내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
+            </TextAnimate>
+          </div>
+          <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
+            <img
+              src="/light-daily-news-2.png"
+              alt="Daily News 2"
+              className="aspect-[4952/1920] w-full max-w-[736px] rounded-2xl object-contain md:rounded-[2rem] dark:hidden"
+              style={{ imageRendering: "crisp-edges" }}
+            />
+            <img
+              src="/dark-daily-news-2.png"
+              alt="Daily News 2"
+              className="hidden aspect-[4928/1904] w-full max-w-[736px] rounded-2xl object-contain md:rounded-[2rem] dark:block"
+              style={{ imageRendering: "crisp-edges" }}
             />
           </div>
         </div>
