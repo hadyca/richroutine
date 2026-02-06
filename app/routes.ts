@@ -43,54 +43,28 @@ export default [
     route("/auth/confirm", "features/auth/screens/confirm.tsx"),
     index("features/home/screens/home.tsx"),
     route("/error", "core/screens/error.tsx"),
-    layout("core/layouts/public.layout.tsx", [
-      // Routes that should only be visible to unauthenticated users.
-      // 인증되지 않은 사용자에게만 표시되어야 하는 라우트입니다.
-      route("/login", "features/auth/screens/login.tsx"),
-      route("/join", "features/auth/screens/join.tsx"),
-      ...prefix("/auth", [
-        route("/api/resend", "features/auth/api/resend.tsx"),
+    route("/login", "features/auth/screens/login.tsx"),
+    route("/join", "features/auth/screens/join.tsx"),
+    ...prefix("/auth", [
+      route("/api/resend", "features/auth/api/resend.tsx"),
+      route("/magic-link", "features/auth/screens/magic-link.tsx"),
+      ...prefix("/social", [
+        route("/start/:provider", "features/auth/screens/social/start.tsx"),
         route(
-          "/forgot-password/reset",
-          "features/auth/screens/forgot-password.tsx",
+          "/complete/:provider",
+          "features/auth/screens/social/complete.tsx",
         ),
-        route("/magic-link", "features/auth/screens/magic-link.tsx"),
-        ...prefix("/otp", [
-          route("/start", "features/auth/screens/otp/start.tsx"),
-          route("/complete", "features/auth/screens/otp/complete.tsx"),
-        ]),
-        ...prefix("/social", [
-          route("/start/:provider", "features/auth/screens/social/start.tsx"),
-          route(
-            "/complete/:provider",
-            "features/auth/screens/social/complete.tsx",
-          ),
-        ]),
       ]),
     ]),
-    layout("core/layouts/private.layout.tsx", { id: "private-auth" }, [
-      ...prefix("/auth", [
-        route(
-          "/forgot-password/create",
-          "features/auth/screens/new-password.tsx",
-        ),
-        route("/email-verified", "features/auth/screens/email-verified.tsx"),
-      ]),
-      // Routes that should only be visible to authenticated users.
-      // 인증된 사용자에게만 표시되어야 하는 라우트입니다.
-      route("/logout", "features/auth/screens/logout.tsx"),
-    ]),
-
+    route("/logout", "features/auth/screens/logout.tsx"),
     ...prefix("/payments", [
       route("/standard", "features/payments/screens/standard.tsx"),
       route("/pro", "features/payments/screens/pro.tsx"),
-      layout("core/layouts/private.layout.tsx", { id: "private-payments" }, [
-        route("/success", "features/payments/screens/success.tsx"),
-        route("/failure", "features/payments/screens/failure.tsx"),
-      ]),
+      // route("/success", "features/payments/screens/success.tsx"),
+      // route("/failure", "features/payments/screens/failure.tsx"),
     ]),
   ]),
-  // 프라이빗으로 감싸야함
+  // 로그인 필요
   layout("features/users/layouts/dashboard.layout.tsx", [
     ...prefix("/dashboard", [
       index("features/users/screens/dashboard.tsx"),

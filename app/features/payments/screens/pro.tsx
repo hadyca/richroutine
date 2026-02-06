@@ -1,43 +1,67 @@
-import type { Route } from "../../checkout/screens/+types/standard";
+import type { Route } from "./+types/pro";
 
 import { Check } from "lucide-react";
+import { DateTime } from "luxon";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Form, redirect } from "react-router";
 
+import { SubmitButton } from "~/core/components/submit-button";
 import { Badge } from "~/core/components/ui/badge";
 import { Button } from "~/core/components/ui/button";
 import { Card } from "~/core/components/ui/card";
-import { Input } from "~/core/components/ui/input";
-import { Label } from "~/core/components/ui/label";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/core/components/ui/dialog";
+// import { Input } from "~/core/components/ui/input";
+// import { Label } from "~/core/components/ui/label";
 import { ShineBorder } from "~/core/components/ui/shine-border";
 import { PRICING_PLANS } from "~/core/constants/pricing";
+import { requireAuthentication } from "~/core/lib/guards.server";
+import makeServerClient from "~/core/lib/supa-client.server";
+import { getLoggedInUserId } from "~/features/users/queries";
+
+import { createSubscription } from "../mutations";
 
 export const meta: Route.MetaFunction = () => {
-  return [{ title: "Standard Checkout | RichRoutine" }];
+  return [{ title: "PRO 요금제 | RichRoutine" }];
 };
 
-// export async function loader({ request }: Route.LoaderArgs) {
-//   const [client] = makeServerClient(request);
-//   await requireAuthentication(client);
+export async function loader({ request }: Route.LoaderArgs) {
+  const [client] = makeServerClient(request);
+  await requireAuthentication(client);
+  return {};
+}
 
-//   const {
-//     data: { user },
-//   } = await client.auth.getUser();
+export async function action({ request }: Route.ActionArgs) {
+  await new Promise((resolve) => setTimeout(resolve, 5000));
 
-//   return {
-//     user,
-//   };
-// }
+  // const [client] = makeServerClient(request);
 
-export default function StandardCheckout() {
-  const navigate = useNavigate();
-  const [couponCode, setCouponCode] = useState("");
+  // const userId = await getLoggedInUserId(client);
 
-  const handleSubscribe = () => {
-    // In a real app, this would call an API to activate the free trial/plan
-    // For now, we'll just simulate success
-    navigate("/payments/success");
-  };
+  // const startedAt = DateTime.now().toJSDate();
+  // const expiresAt = DateTime.now().plus({ months: 1 }).toJSDate();
+  // await createSubscription(client, {
+  //   userId,
+  //   subscriptionType: "pro",
+  //   status: "active",
+  //   startedAt,
+  //   expiresAt,
+  // });
+  // return redirect("/dashboard");
+}
+
+export default function ProPayment() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // const navigation = useNavigation();
+  // const isSubmitting = navigation.state === "submitting";
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -98,41 +122,27 @@ export default function StandardCheckout() {
         </Card>
 
         {/* Right: Subscription Summary & Action */}
-        <div className="md:col-span-2">
-          <Card className="flex flex-col md:h-full">
-            <div className="p-8">
-              <h3 className="mb-6 text-xl font-bold">구독 요약</h3>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <Form className="md:col-span-2" method="post" id="subscribe-form">
+            <Card className="flex flex-col md:h-full">
+              <div className="p-8">
+                <h3 className="mb-6 text-xl font-bold">구독 요약</h3>
 
-              <div className="space-y-4">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">선택한 플랜</span>
-                  <span className="text-foreground font-medium">
-                    {PRICING_PLANS[1].name}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">결제 주기</span>
-                  <span className="text-foreground font-medium">매월</span>
-                </div>
-
-                <div className="my-6 border-t" />
-
-                {/* <div className="space-y-2">
-                  <label className="font-semibold">쿠폰 코드</label>
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="코드를 입력하세요"
-                      value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value)}
-                      className="h-10"
-                    />
-                    <Button variant="outline" className="h-10 shrink-0">
-                      적용
-                    </Button>
+                <div className="space-y-4">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">선택한 플랜</span>
+                    <span className="text-foreground font-medium">
+                      {PRICING_PLANS[1].name}
+                    </span>
                   </div>
-                </div> */}
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">결제 주기</span>
+                    <span className="text-foreground font-medium">매월</span>
+                  </div>
 
-                <div className="space-y-2">
+                  <div className="my-6 border-t" />
+
+                  {/* <div className="space-y-2">
                   <Label className="flex flex-col items-start gap-1">
                     쿠폰 코드
                   </Label>
@@ -140,25 +150,49 @@ export default function StandardCheckout() {
                     <Input placeholder="코드를 입력하세요" />
                     <Button variant="outline">적용</Button>
                   </div>
-                </div>
+                </div> */}
 
-                <div className="my-6 border-t" />
+                  {/* <div className="my-6 border-t" /> */}
 
-                <div className="flex items-end justify-between">
-                  <span className="font-semibold">최종 결제 금액</span>
-                  <span className="text-primary text-2xl font-bold">0원</span>
+                  <div className="flex items-end justify-between">
+                    <span className="font-semibold">최종 결제 금액</span>
+                    <span className="text-primary text-2xl font-bold">0원</span>
+                  </div>
                 </div>
+                <DialogTrigger asChild>
+                  <Button
+                    size="lg"
+                    className="mt-8 h-14 w-full text-lg font-bold"
+                  >
+                    구독하기
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-sm">
+                  <DialogHeader>
+                    <DialogTitle>PRO 구독을 시작하시겠습니까?</DialogTitle>
+                    <DialogDescription>
+                      PRO 요금제를 1개월 동안 무료로 이용하실 수 있습니다.
+                      <br />
+                      구독 시작일로부터 1개월 후 자동으로 만료됩니다.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline">취소</Button>
+                    </DialogClose>
+                    <SubmitButton
+                      form="subscribe-form"
+                      loadingText="로딩 중"
+                      onClick={() => setIsDialogOpen(false)}
+                    >
+                      구독
+                    </SubmitButton>
+                  </DialogFooter>
+                </DialogContent>
               </div>
-              <Button
-                onClick={handleSubscribe}
-                size="lg"
-                className="mt-8 h-14 w-full text-lg font-bold"
-              >
-                구독하기
-              </Button>
-            </div>
-          </Card>
-        </div>
+            </Card>
+          </Form>
+        </Dialog>
       </div>
     </div>
   );

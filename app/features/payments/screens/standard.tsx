@@ -1,4 +1,4 @@
-import type { Route } from "../../checkout/screens/+types/standard";
+import type { Route } from "./+types/standard";
 
 import { Check } from "lucide-react";
 import { useState } from "react";
@@ -10,7 +10,7 @@ import { Input } from "~/core/components/ui/input";
 import { PRICING_PLANS } from "~/core/constants/pricing";
 
 export const meta: Route.MetaFunction = () => {
-  return [{ title: "Standard Checkout | RichRoutine" }];
+  return [{ title: "Standard 요금제 | RichRoutine" }];
 };
 
 // export async function loader({ request }: Route.LoaderArgs) {
@@ -26,7 +26,7 @@ export const meta: Route.MetaFunction = () => {
 //   };
 // }
 
-export default function StandardCheckout() {
+export default function StandardPayment() {
   const navigate = useNavigate();
 
   const handleSubscribe = () => {
