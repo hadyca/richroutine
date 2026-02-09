@@ -10,7 +10,7 @@ import { PRICING_PLANS } from "~/core/constants/pricing";
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="relative w-full px-4 py-16 md:py-24">
+    <section id="pricing" className="mt-20 w-full px-4">
       <div className="mx-auto max-w-5xl">
         {/* Header */}
         <motion.div

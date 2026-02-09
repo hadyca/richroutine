@@ -14,7 +14,6 @@
 import type { Route } from "./+types/home";
 
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { AnimatedGradientText } from "~/core/components/ui/animated-gradient-text";
 import { AuroraText } from "~/core/components/ui/aurora-text";
@@ -25,8 +24,9 @@ import { NumberTicker } from "~/core/components/ui/number-ticker";
 import { Progress } from "~/core/components/ui/progress";
 import { TextAnimate } from "~/core/components/ui/text-animate";
 import { TypingAnimation } from "~/core/components/ui/typing-animation";
-import i18next from "~/core/lib/i18next.server";
+import makeServerClient from "~/core/lib/supa-client.server";
 import { cn } from "~/core/lib/utils";
+import { getTotalUserCount } from "~/features/users/queries";
 
 import { PricingSection } from "../components/pricing-section";
 
@@ -43,10 +43,14 @@ import { PricingSection } from "../components/pricing-section";
  * @param data - Data returned from the loader function containing translated title and subtitle
  * @returns Array of metadata objects for the page
  */
-export const meta: Route.MetaFunction = ({ data }) => {
+export const meta: Route.MetaFunction = () => {
   return [
-    { title: data?.title },
-    { name: "description", content: data?.subtitle },
+    { title: "리치루틴 - 상위 1% 투자자의 아침 루틴" },
+    {
+      name: "description",
+      content:
+        "AI가 요약한 국내외 증시·부동산 뉴스를 매일 아침 받아보세요. VIX, VKOSPI 등 시장 변동성 지표와 맞춤형 투자 인사이트를 한눈에 확인하세요.",
+    },
   ];
 };
 
@@ -66,13 +70,10 @@ export const meta: Route.MetaFunction = ({ data }) => {
  * @returns Object with translated title and subtitle strings
  */
 export async function loader({ request }: Route.LoaderArgs) {
-  // Get a translation function for the user's locale from the request
-  const t = await i18next.getFixedT(request);
-
-  // Return translated strings for use in both the component and meta function
+  const [client] = makeServerClient(request);
+  const totalUsers = await getTotalUserCount(client);
   return {
-    title: t("home.title"),
-    subtitle: t("home.subtitle"),
+    totalUsers,
   };
 }
 
@@ -95,15 +96,17 @@ export async function loader({ request }: Route.LoaderArgs) {
  *
  * @returns JSX element representing the home page
  */
-export default function Home() {
+export default function Home({ loaderData }: Route.ComponentProps) {
   const [progress, setProgress] = useState(0);
+  const TARGET_USERS = 1000;
+  const progressPercentage = Math.ceil(
+    (loaderData.totalUsers / TARGET_USERS) * 100,
+  );
 
   useEffect(() => {
-    const timer = setTimeout(() => setProgress(66), 500);
+    const timer = setTimeout(() => setProgress(progressPercentage), 500);
     return () => clearTimeout(timer);
-  }, []);
-  // Get the translation function for the current locale
-  const { t } = useTranslation();
+  }, [progressPercentage]);
 
   const REVIEWS = [
     {
@@ -166,7 +169,7 @@ export default function Home() {
   return (
     <>
       {/* 히어로 섹션 */}
-      <section className="flex min-h-[calc(100vh-300px)] flex-col justify-between py-10 md:py-0">
+      <section className="flex min-h-[calc(100vh-300px)] flex-col justify-between">
         <div className="flex items-center justify-center">
           <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 md:gap-8">
             <div className="flex flex-col items-center gap-8 text-center md:items-start md:text-left">
@@ -216,7 +219,7 @@ export default function Home() {
                       <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-1">
                         <div>
                           <NumberTicker
-                            value={500}
+                            value={loaderData.totalUsers}
                             className="text-primary-foreground font-bold"
                             delay={0.5}
                           />
@@ -229,7 +232,7 @@ export default function Home() {
                             (
                           </span>
                           <NumberTicker
-                            value={50}
+                            value={progressPercentage}
                             className="text-primary-foreground text-sm font-bold"
                             delay={0.5}
                           />
@@ -244,7 +247,7 @@ export default function Home() {
                     </Progress>
                     <div className="flex w-full items-center justify-between px-1 text-sm font-medium">
                       <span>0명</span>
-                      <span>목표 1,000명</span>
+                      <span>목표 {TARGET_USERS.toLocaleString()}명</span>
                     </div>
                   </div>
                 </div>
@@ -301,7 +304,7 @@ export default function Home() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="col-span-1 flex flex-col justify-center text-center md:text-left">
             <h2 className="text-3xl font-semibold tracking-tight md:text-[42px]">
-              제목
+              시장 변동성을 한눈에
             </h2>
             <TextAnimate
               animation="slideLeft"
@@ -309,7 +312,9 @@ export default function Home() {
               className="text-muted-foreground mt-4"
               viewport={{ amount: 0.8 }}
             >
-              내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
+              VIX, VKOSPI, KB 부동산 매수우위지표를 쉽게 확인하세요. 복잡한 차트
+              분석 없이도 시장의 온도를 즉시 파악하고, 투자 타이밍을 놓치지
+              마세요.
             </TextAnimate>
           </div>
           <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
@@ -332,7 +337,7 @@ export default function Home() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="col-span-1 flex flex-col justify-center text-center md:text-left">
             <h2 className="text-3xl font-semibold tracking-tight md:text-[42px]">
-              제목
+              지표를 인사이트로
             </h2>
             <TextAnimate
               animation="slideLeft"
@@ -340,7 +345,9 @@ export default function Home() {
               className="text-muted-foreground mt-4"
               viewport={{ amount: 0.8 }}
             >
-              내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
+              AI가 실시간 변동성 지표를 분석하여 시장 상황을 명확하게
+              요약합니다. 공포와 탐욕의 균형점을 파악하고, 감정이 아닌 데이터로
+              투자하세요.
             </TextAnimate>
           </div>
           <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
@@ -363,7 +370,7 @@ export default function Home() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="col-span-1 flex flex-col justify-center text-center md:text-left">
             <h2 className="text-3xl font-semibold tracking-tight md:text-[42px]">
-              제목
+              소음은 제거, 신호만 전달
             </h2>
             <TextAnimate
               animation="slideLeft"
@@ -371,7 +378,8 @@ export default function Home() {
               className="text-muted-foreground mt-4"
               viewport={{ amount: 0.8 }}
             >
-              내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
+              매일 수백 건의 뉴스 속에서 AI가 투자 가치가 있는 상위 5개 핵심
+              이슈를 추출합니다. 시간은 아끼고, 인사이트는 더 깊게.
             </TextAnimate>
           </div>
           <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
@@ -394,7 +402,7 @@ export default function Home() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="col-span-1 flex flex-col justify-center text-center md:text-left">
             <h2 className="text-3xl font-semibold tracking-tight md:text-[42px]">
-              제목
+              내 종목에 미치는 영향까지
             </h2>
             <TextAnimate
               animation="slideLeft"
@@ -402,7 +410,8 @@ export default function Home() {
               className="text-muted-foreground mt-4"
               viewport={{ amount: 0.8 }}
             >
-              내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
+              같은 뉴스도 보유 종목에 따라 의미가 다릅니다. AI가 당신의 관심
+              종목 기준으로 뉴스를 재해석하여, 진짜 필요한 정보만 전달합니다.
             </TextAnimate>
           </div>
           <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
@@ -420,8 +429,7 @@ export default function Home() {
             />
           </div>
         </div>
-
-        <div className="relative mt-32 flex w-full flex-col items-center justify-center overflow-hidden md:mt-52">
+        <div className="relative mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
           <Marquee className="items-start [--duration:20s]">
             {REVIEWS.map((review) => (
               <ReviewCard key={review.username} {...review} />

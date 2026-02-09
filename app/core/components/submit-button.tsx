@@ -55,7 +55,7 @@ interface SubmitButtonProps
  */
 export function SubmitButton({
   children,
-  loadingText = "로딩 중",
+  loadingText = "처리 중...",
   loadingIcon,
   form,
   className,
@@ -76,14 +76,16 @@ export function SubmitButton({
       size={size}
       {...props}
     >
-      {isSubmitting ? (
-        <>
-          {loadingIcon || <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {loadingText}
-        </>
-      ) : (
-        children
-      )}
+      <span className="relative inline-flex items-center justify-center">
+        {/* Original content - invisible when loading but maintains space */}
+        <span className={isSubmitting ? "invisible" : ""}>{children}</span>
+        {/* Loading spinner - absolutely positioned on top */}
+        {isSubmitting && (
+          <span className="absolute inset-0 flex items-center justify-center">
+            {loadingIcon || <Loader2 className="h-4 w-4 animate-spin" />}
+          </span>
+        )}
+      </span>
     </Button>
   );
 }

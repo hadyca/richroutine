@@ -17,9 +17,9 @@
 
 /**
  * H1 Typography Component
- * 
+ *
  * Renders a top-level heading with appropriate styling for MDX content.
- * 
+ *
  * @param children - The content to be rendered within the heading
  * @param props - Additional HTML attributes to be passed to the heading element
  * @returns A styled h1 element
@@ -43,10 +43,10 @@ export function TypographyH1({
 
 /**
  * H2 Typography Component
- * 
+ *
  * Renders a second-level heading with appropriate styling for MDX content.
  * Includes a bottom border and special styling for the first H2 in a section.
- * 
+ *
  * @param children - The content to be rendered within the heading
  * @param props - Additional HTML attributes to be passed to the heading element
  * @returns A styled h2 element
@@ -70,10 +70,10 @@ export function TypographyH2({
 
 /**
  * H3 Typography Component
- * 
+ *
  * Renders a third-level heading with appropriate styling for MDX content.
  * Used for subsections within H2 sections.
- * 
+ *
  * @param children - The content to be rendered within the heading
  * @param props - Additional HTML attributes to be passed to the heading element
  * @returns A styled h3 element
@@ -97,10 +97,10 @@ export function TypographyH3({
 
 /**
  * H4 Typography Component
- * 
+ *
  * Renders a fourth-level heading with appropriate styling for MDX content.
  * Used for detailed subsections within H3 sections.
- * 
+ *
  * @param children - The content to be rendered within the heading
  * @param props - Additional HTML attributes to be passed to the heading element
  * @returns A styled h4 element
@@ -124,10 +124,10 @@ export function TypographyH4({
 
 /**
  * Paragraph Typography Component
- * 
+ *
  * Renders a paragraph with appropriate styling for MDX content.
  * Includes special spacing for non-first paragraphs to create proper content rhythm.
- * 
+ *
  * @param children - The content to be rendered within the paragraph
  * @param props - Additional HTML attributes to be passed to the paragraph element
  * @returns A styled p element
@@ -148,10 +148,10 @@ export function TypographyP({
 
 /**
  * Blockquote Typography Component
- * 
+ *
  * Renders a blockquote with appropriate styling for MDX content.
  * Includes a left border and italic styling to distinguish quoted content.
- * 
+ *
  * @param children - The content to be rendered within the blockquote
  * @param props - Additional HTML attributes to be passed to the blockquote element
  * @returns A styled blockquote element
@@ -172,10 +172,10 @@ export function TypographyBlockquote({
 
 /**
  * Unordered List Typography Component
- * 
+ *
  * Renders an unordered list with appropriate styling for MDX content.
  * Includes disc-style bullets and proper spacing between list items.
- * 
+ *
  * @param children - The content to be rendered within the list
  * @param props - Additional HTML attributes to be passed to the ul element
  * @returns A styled unordered list element
@@ -196,10 +196,10 @@ export function TypographyList({
 
 /**
  * Ordered List Typography Component
- * 
+ *
  * Renders an ordered list with appropriate styling for MDX content.
  * Includes decimal numbering and proper spacing between list items.
- * 
+ *
  * @param children - The content to be rendered within the list
  * @param props - Additional HTML attributes to be passed to the ol element
  * @returns A styled ordered list element
@@ -220,10 +220,10 @@ export function TypographyOrderedList({
 
 /**
  * Inline Code Typography Component
- * 
+ *
  * Renders inline code with appropriate styling for MDX content.
  * Includes background color, rounded corners, and monospace font to distinguish code snippets.
- * 
+ *
  * @param children - The content to be rendered within the code element
  * @param props - Additional HTML attributes to be passed to the code element
  * @returns A styled inline code element

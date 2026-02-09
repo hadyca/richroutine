@@ -4,6 +4,7 @@ import { Check } from "lucide-react";
 import { DateTime } from "luxon";
 import { useState } from "react";
 import { Form, redirect } from "react-router";
+import { useNavigation } from "react-router";
 
 import { SubmitButton } from "~/core/components/submit-button";
 import { Badge } from "~/core/components/ui/badge";
@@ -59,10 +60,6 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function ProPayment() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // const navigation = useNavigation();
-  // const isSubmitting = navigation.state === "submitting";
-
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-12 text-center">
@@ -122,7 +119,7 @@ export default function ProPayment() {
         </Card>
 
         {/* Right: Subscription Summary & Action */}
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog>
           <Form className="md:col-span-2" method="post" id="subscribe-form">
             <Card className="flex flex-col md:h-full">
               <div className="p-8">
@@ -172,21 +169,13 @@ export default function ProPayment() {
                     <DialogTitle>PRO 구독을 시작하시겠습니까?</DialogTitle>
                     <DialogDescription>
                       PRO 요금제를 1개월 동안 무료로 이용하실 수 있습니다.
-                      <br />
-                      구독 시작일로부터 1개월 후 자동으로 만료됩니다.
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
                     <DialogClose asChild>
                       <Button variant="outline">취소</Button>
                     </DialogClose>
-                    <SubmitButton
-                      form="subscribe-form"
-                      loadingText="로딩 중"
-                      onClick={() => setIsDialogOpen(false)}
-                    >
-                      구독
-                    </SubmitButton>
+                    <SubmitButton form="subscribe-form">구독</SubmitButton>
                   </DialogFooter>
                 </DialogContent>
               </div>
