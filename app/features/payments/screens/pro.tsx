@@ -41,22 +41,20 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export async function action({ request }: Route.ActionArgs) {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  const [client] = makeServerClient(request);
 
-  // const [client] = makeServerClient(request);
+  const userId = await getLoggedInUserId(client);
 
-  // const userId = await getLoggedInUserId(client);
-
-  // const startedAt = DateTime.now().toJSDate();
-  // const expiresAt = DateTime.now().plus({ months: 1 }).toJSDate();
-  // await createSubscription(client, {
-  //   userId,
-  //   subscriptionType: "pro",
-  //   status: "active",
-  //   startedAt,
-  //   expiresAt,
-  // });
-  // return redirect("/dashboard");
+  const startedAt = DateTime.now().toJSDate();
+  const expiresAt = DateTime.now().plus({ months: 1 }).toJSDate();
+  await createSubscription(client, {
+    userId,
+    subscriptionType: "pro",
+    status: "active",
+    startedAt,
+    expiresAt,
+  });
+  return redirect("/dashboard");
 }
 
 export default function ProPayment() {

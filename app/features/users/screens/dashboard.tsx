@@ -17,10 +17,29 @@ import {
   PopoverTrigger,
 } from "~/core/components/ui/popover";
 import { Separator } from "~/core/components/ui/separator";
+import { requireAuthentication } from "~/core/lib/guards.server";
+import makeServerClient from "~/core/lib/supa-client.server";
 
 export const meta: Route.MetaFunction = () => {
   return [{ title: `Command Center | ${import.meta.env.VITE_APP_NAME}` }];
 };
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const [client] = makeServerClient(request);
+  await requireAuthentication(client);
+  const apiKey = process.env.FINNHUB_API_KEY;
+  // 'business' 카테고리는 경제/산업 중심의 기사만 반환합니다.
+  const response = await fetch(
+    `https://finnhub.io/api/v1/news?category=business&token=${apiKey}`,
+  );
+
+  const data = await response.json();
+  console.log(data.slice(0, 3));
+  // 리치루틴 서비스 톤앤매너에 맞는 전문적인 뉴스만 필터링 (선택 사항)
+  // 예: 특정 키워드(Fed, Inflation, Earnings)가 포함된 것 위주로 정렬 가능
+  // return data.slice(0, 10);
+  return {};
+}
 
 export default function Dashboard() {
   return (
