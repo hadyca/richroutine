@@ -12,8 +12,7 @@
  * - Payment agreement handling
  * - Secure payment processing with metadata
  */
-import type { Route } from "./+types/checkout";
-
+// import type { Route } from "./+types/checkout";
 import {
   type TossPaymentsWidgets,
   loadTossPayments,
