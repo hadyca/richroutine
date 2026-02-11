@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      economy_indices: {
+        Row: {
+          base_date: string | null
+          change_percent: number | null
+          created_at: string
+          current_price: number
+          economy_indices_id: number
+          symbol: string
+          updated_at: string
+        }
+        Insert: {
+          base_date?: string | null
+          change_percent?: number | null
+          created_at?: string
+          current_price: number
+          economy_indices_id?: never
+          symbol: string
+          updated_at?: string
+        }
+        Update: {
+          base_date?: string | null
+          change_percent?: number | null
+          created_at?: string
+          current_price?: number
+          economy_indices_id?: never
+          symbol?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           approved_at: string
@@ -138,7 +168,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_total_user_count: { Args: never; Returns: number }
     }
     Enums: {
       [_ in never]: never

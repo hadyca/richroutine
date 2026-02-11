@@ -1,0 +1,1 @@
+ALTER TABLE "economy_indices" ADD COLUMN "base_date" timestamp;

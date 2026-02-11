@@ -36,7 +36,10 @@ export default [
       route("/email", "features/users/api/change-email.tsx"),
       route("/profile", "features/users/api/edit-profile.tsx"),
     ]),
-    ...prefix("/cron", [route("/mailer", "features/cron/api/mailer.tsx")]),
+    ...prefix("/cron", [
+      route("/mailer", "features/cron/api/mailer.tsx"),
+      route("/economy-index", "features/cron/api/economy-index.tsx"),
+    ]),
   ]),
 
   layout("core/layouts/navigation.layout.tsx", [

@@ -89,9 +89,9 @@ export async function action({ request }: Route.LoaderArgs) {
       // Send welcome email using the Resend client
       const { error } = await resendClient.emails.send({
         // Make sure this domain is the Resend domain.
-        from: "Richroutine <hello@mail.richroutine.net>",
+        from: "RichRoutine <hello@mail.richroutine.net>",
         to: [to],
-        subject: "리치루틴에 오신 것을 환영합니다!",
+        subject: "리치루틴 테스트 환영 메일",
         react: WelcomeEmail({ profile: JSON.stringify(emailData, null, 2) }),
       });
       // Log any errors that occur during email sending
