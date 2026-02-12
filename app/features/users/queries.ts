@@ -32,7 +32,6 @@ export const getLoggedInUserId = async (client: SupabaseClient<Database>) => {
 export async function getTotalUserCount(client: SupabaseClient<Database>) {
   // Call the database function that bypasses RLS to get accurate total count
   // The SQL function is defined in sql/functions/get_total_user_count.sql
-  // @ts-expect-error - RPC function not yet in generated types
   const { data, error } = await client.rpc("get_total_user_count");
 
   if (error) {
