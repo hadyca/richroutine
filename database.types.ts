@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      economy_analysis: {
+        Row: {
+          created_at: string
+          economy_analysis_id: number
+          kb_summary: string
+          overall_summary: string
+          updated_at: string
+          vix_summary: string
+          vkospi_summary: string
+        }
+        Insert: {
+          created_at?: string
+          economy_analysis_id?: never
+          kb_summary: string
+          overall_summary: string
+          updated_at?: string
+          vix_summary: string
+          vkospi_summary: string
+        }
+        Update: {
+          created_at?: string
+          economy_analysis_id?: never
+          kb_summary?: string
+          overall_summary?: string
+          updated_at?: string
+          vix_summary?: string
+          vkospi_summary?: string
+        }
+        Relationships: []
+      }
       economy_indices: {
         Row: {
           base_date: string | null

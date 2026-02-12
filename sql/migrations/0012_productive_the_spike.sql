@@ -1,0 +1,1 @@
+ALTER TABLE "economy_indices" DROP CONSTRAINT "economy_indices_symbol_unique";

@@ -57,6 +57,41 @@
       "when": 1770792446292,
       "tag": "0007_bright_goblin_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1770854521714,
+      "tag": "0008_shiny_trauma",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1770854542962,
+      "tag": "0009_right_corsair",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1770854664566,
+      "tag": "0010_keen_hannibal_king",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1770854748293,
+      "tag": "0011_purple_zaran",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1770874190743,
+      "tag": "0012_productive_the_spike",
+      "breakpoints": true
     }
   ]
 }
