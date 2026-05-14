@@ -1,0 +1,1 @@
+ALTER TABLE "tickers" ADD CONSTRAINT "tickers_ticker_unique" UNIQUE("ticker");

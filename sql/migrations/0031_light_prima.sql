@@ -1,0 +1,1 @@
+ALTER TABLE "economy_analysis" DROP COLUMN "kb_summary";

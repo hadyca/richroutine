@@ -1,0 +1,2 @@
+ALTER TABLE "portfolio_news" DROP CONSTRAINT "portfolio_news_uuid_unique";--> statement-breakpoint
+ALTER TABLE "portfolio_news" ADD CONSTRAINT "portfolio_news_ticker_uuid_unique" UNIQUE("ticker","uuid");

@@ -1,0 +1,1 @@
+ALTER TABLE "stock_expert_opinions" ADD CONSTRAINT "stock_expert_opinions_profile_id_market_unique" UNIQUE("profile_id","market");

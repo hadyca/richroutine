@@ -1,0 +1,108 @@
+/**
+ * Sitemap Generator Module
+ *
+ * This module dynamically generates an XML sitemap for the application by scanning
+ * content directories and combining them with static routes. The sitemap helps search
+ * engines discover and index the application's pages, improving SEO performance.
+ *
+ * The module automatically includes:
+ * - Blog posts from MDX files in the blog directory
+ * - Legal pages from MDX files in the legal directory
+ * - Custom static routes defined in the code
+ *
+ * The sitemap is generated on-demand when the route is accessed, ensuring it always
+ * contains the latest content without requiring a rebuild of the application.
+ *
+ * 사이트맵 생성기 모듈
+ *
+ * 이 모듈은 콘텐츠 디렉토리를 스캔하고 이를 정적 경로와 결합하여 애플리케이션의 XML 사이트맵을
+ * 동적으로 생성합니다. 사이트맵은 검색 엔진이 애플리케이션의 페이지를 검색하고 색인화하는 데
+ * 도움을 주어 SEO 성능을 향상시킵니다.
+ *
+ * 이 모듈은 다음을 자동으로 포함합니다:
+ * - blog 디렉토리의 MDX 파일에서 가져온 블로그 포스트
+ * - legal 디렉토리의 MDX 파일에서 가져온 법적 고지 페이지
+ * - 코드에 정의된 사용자 정의 정적 경로
+ *
+ * 사이트맵은 경로에 액세스할 때 온디맨드 방식으로 생성되므로, 애플리케이션을 다시 빌드할
+ * 필요 없이 항상 최신 콘텐츠를 포함합니다.
+ */
+import { readdir } from "node:fs/promises";
+import path from "node:path";
+
+/**
+ * Sitemap generator loader function
+ *
+ * This React Router loader function dynamically generates an XML sitemap for the application.
+ * It scans the filesystem for content files, combines them with static routes, and formats
+ * them according to the sitemap protocol specification.
+ *
+ * The function performs these steps:
+ * 1. Gets the site domain from environment variables
+ * 2. Scans the blog directory for MDX files and converts filenames to URLs
+ * 3. Scans the legal directory for MDX files and converts filenames to URLs
+ * 4. Combines these with static routes like homepage, login, and registration
+ * 5. Formats all URLs according to the sitemap XML specification
+ * 6. Returns an XML response with the proper content type header
+ *
+ * 사이트맵 생성기 로더 함수
+ *
+ * 이 React Router 로더 함수는 애플리케이션을 위한 XML 사이트맵을 동적으로 생성합니다.
+ * 파일 시스템에서 콘텐츠 파일을 스캔하고, 이를 정적 경로와 결합하며, 사이트맵 프로토콜
+ * 사양에 따라 형식을 지정합니다.
+ *
+ * 이 함수는 다음 단계를 수행합니다:
+ * 1. 환경 변수에서 사이트 도메인을 가져옵니다.
+ * 2. 블로그 디렉토리에서 MDX 파일을 스캔하고 파일 이름을 URL로 변환합니다.
+ * 3. 법적 고지 디렉토리에서 MDX 파일을 스캔하고 파일 이름을 URL로 변환합니다.
+ * 4. 이를 홈페이지, 로그인, 회원가입과 같은 정적 경로와 결합합니다.
+ * 5. 모든 URL을 사이트맵 XML 사양에 따라 형식을 지정합니다.
+ * 6. 적절한 콘텐츠 유형 헤더와 함께 XML 응답을 반환합니다.
+ *
+ * @returns {Response} XML response containing the sitemap
+ */
+export async function loader() {
+  // Get the site domain from environment variables
+  const DOMAIN = process.env.SITE_URL;
+
+  // Scan the blog directory for MDX files and convert to URLs
+  // const blogUrls = (
+  //   await readdir(path.join(process.cwd(), "app", "features", "blog", "docs"))
+  // )
+  //   .filter((file) => file.endsWith(".mdx")) // Only include MDX files
+  //   .map((file) => `/blog/${file.replace(".mdx", "")}`);
+
+  // Scan the legal directory for MDX files and convert to URLs
+  const legalUrls = (
+    await readdir(path.join(process.cwd(), "app", "features", "legal", "docs"))
+  )
+    .filter((file) => file.endsWith(".mdx")) // Only include MDX files
+    .map((file) => `/legal/${file.replace(".mdx", "")}`);
+
+  // Define static routes that should be included in the sitemap
+  const customUrls = ["/", "/login", "/join"];
+
+  // Combine all URLs and format them according to sitemap protocol
+  const sitemapUrls = [...legalUrls, ...customUrls].map((url) => {
+    return `<url>
+      <loc>${DOMAIN}${url}</loc>
+      <lastmod>${new Date().toISOString()}</lastmod>
+    </url>`;
+  });
+
+  // Return an XML response with the sitemap
+  return new Response(
+    `<?xml version="1.0" encoding="UTF-8"?>
+    <urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+    >
+      ${sitemapUrls.join("\n")}
+    </urlset>
+    `,
+    {
+      headers: { "Content-Type": "application/xml" }, // Set proper content type for XML
+    },
+  );
+}

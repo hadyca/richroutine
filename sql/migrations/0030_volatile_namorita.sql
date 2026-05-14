@@ -1,0 +1,1 @@
+ALTER TABLE "stock_expert_opinions" ALTER COLUMN "market" DROP NOT NULL;

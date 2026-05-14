@@ -1,0 +1,3 @@
+ALTER TABLE "us_stock_expert_opinions" ADD COLUMN "profile_id" uuid NOT NULL;--> statement-breakpoint
+ALTER TABLE "us_stock_expert_opinions" ADD CONSTRAINT "us_stock_expert_opinions_profile_id_profiles_profile_id_fk" FOREIGN KEY ("profile_id") REFERENCES "public"."profiles"("profile_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER POLICY "select-us-stock-expert-opinions-policy" ON "us_stock_expert_opinions" TO authenticated USING ((select auth.uid()) = "us_stock_expert_opinions"."profile_id");

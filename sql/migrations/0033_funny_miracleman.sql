@@ -1,0 +1,1 @@
+ALTER TABLE "economy_news" DROP COLUMN "category";

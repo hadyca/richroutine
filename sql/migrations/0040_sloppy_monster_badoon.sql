@@ -1,0 +1,1 @@
+ALTER TABLE "watchlists" ADD COLUMN "is_ai_news_subscribed" boolean DEFAULT false NOT NULL;

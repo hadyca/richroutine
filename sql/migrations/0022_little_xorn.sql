@@ -1,0 +1,1 @@
+ALTER TABLE "tokens" ADD CONSTRAINT "tokens_provider_unique" UNIQUE("provider");

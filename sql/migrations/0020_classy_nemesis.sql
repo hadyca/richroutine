@@ -1,0 +1,1 @@
+CREATE POLICY "update-tickers-policy" ON "tickers" AS PERMISSIVE FOR UPDATE TO "authenticated" USING (true) WITH CHECK (true);

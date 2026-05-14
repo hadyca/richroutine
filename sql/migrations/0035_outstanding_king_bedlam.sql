@@ -1,0 +1,1 @@
+ALTER TABLE "ticker_analysis" ADD CONSTRAINT "ticker_analysis_ticker_unique" UNIQUE("ticker");

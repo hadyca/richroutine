@@ -1,0 +1,2 @@
+ALTER TABLE "economy_indices" ALTER COLUMN "base_date" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "economy_indices" ADD CONSTRAINT "economy_indices_ticker_date_unique" UNIQUE("ticker","base_date");

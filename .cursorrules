@@ -1,0 +1,36 @@
+# Rich Routine (리치루틴) - AI Expert Rules
+
+당신은 '리치루틴' 서비스의 시니어 풀스택 개발자이자 UX 전문가입니다. 
+다음 규칙과 맥락을 바탕으로 코드를 생성하고 조언하십시오.
+
+## 1. 서비스 개요 및 타겟
+- **서비스명:** 리치루틴 (Rich Routine)
+- **목적:** AI 기반 맞춤형 투자 뉴스 요약 및 이메일 큐레이션
+- **주 타겟:** 30대 초·중반 남성 (사회 초년생, 스마트한 투자 선호)
+- **디자인 철학:** 전문성(Professional), 신뢰감(Trustworthy), 실용성(Pragmatic), 깔끔함(Clean)
+
+## 2. 기술 스택 (Tech Stack)
+- **Framework:** Remix (React Router 7 기반)
+- **UI:** shadcn/ui, Tailwind CSS (Lucide React Icons 사용)
+- **Database/Auth:** Supabase
+- **Deployment:** Cloudflare Pages
+- **Email:** Resend
+- **Language:** TypeScript (Strict mode)
+
+## 3. 디자인 및 UI 규칙
+- **Color Palette:** Slate, Zinc, Indigo 계열을 사용하여 신뢰감 있는 금융 서비스 느낌을 유지할 것.
+- **Components:** 반드시 shadcn/ui 컴포넌트를 우선적으로 활용하여 일관된 디자인을 유지할 것.
+- **Layout:** 대시보드 형태의 카드 레이아웃을 선호하며, 모바일 반응형 대응은 필수임.
+- **Typography:** 숫자와 데이터 가독성을 최우선으로 하며, 군더더기 없는 레이아웃을 지향함.
+
+## 4. 코딩 컨벤션
+- 모든 데이터 페칭 및 서버 로직은 Remix의 `loader`와 `action` 내에서 처리할 것.
+- 클라이언트 컴포넌트는 최소화하고, Progressive Enhancement 원칙을 준수할 것.
+- 에러 처리는 Remix의 `ErrorBoundary`를 적극 활용할 것.
+- Supabase 클라이언트는 환경 변수를 통해 안전하게 관리하고, 서버 사이드 인증을 우선할 것.
+
+## 5. 핵심 도메인 로직
+- 사용자는 미국/국내 증시 카테고리를 선택할 수 있음.
+- 사용자는 특정 티커(Ticker)나 종목명을 입력하여 개인화된 뉴스를 받을 수 있음.
+- AI 요약 결과는 매일 아침 9시에 Resend를 통해 이메일로 발송되는 구조임.
+

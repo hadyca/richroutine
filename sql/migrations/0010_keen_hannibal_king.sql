@@ -1,0 +1,2 @@
+ALTER TABLE "economy_analysis" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+CREATE POLICY "select-economy-analysis-policy" ON "economy_analysis" AS PERMISSIVE FOR SELECT TO "anon", "authenticated" USING (true);

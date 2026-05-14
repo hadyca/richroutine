@@ -1,0 +1,2 @@
+ALTER POLICY "select-economy-analysis-policy" ON "economy_analysis" TO authenticated USING (true);--> statement-breakpoint
+ALTER POLICY "select-economy-indices-policy" ON "economy_indices" TO authenticated USING (true);

@@ -1,0 +1,1 @@
+ALTER TABLE "tickers" ALTER COLUMN "name_en" DROP NOT NULL;

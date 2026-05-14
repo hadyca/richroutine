@@ -1,0 +1,1 @@
+ALTER TABLE "ticker_analysis" RENAME COLUMN "keyword" TO "status";

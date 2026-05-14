@@ -1,0 +1,1 @@
+CREATE POLICY "watchlist-update-policy" ON "watchlists" AS PERMISSIVE FOR UPDATE TO "authenticated" USING ((select auth.uid()) = "watchlists"."profile_id") WITH CHECK ((select auth.uid()) = "watchlists"."profile_id");
