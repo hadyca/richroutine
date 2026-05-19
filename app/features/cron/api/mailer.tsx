@@ -64,8 +64,7 @@ export async function action({ request }: Route.ActionArgs) {
   }
   // Pop a message from the Postgres message queue (PGMQ)
   // Note: Using admin client is necessary to access the queue
-  const { data: message, error } = await adminClient
-    // @ts-expect-error - PGMQ types are not fully defined in the Supabase client
+  const { data: message, error } = await (adminClient as any)
     .schema("pgmq_public")
     .rpc("pop", {
       queue_name: "mailer", // Queue name in Postgres

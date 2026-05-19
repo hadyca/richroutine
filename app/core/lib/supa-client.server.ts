@@ -64,7 +64,7 @@ export default function makeServerClient(
           // Parse cookies from the request headers
           return parseCookieHeader(request.headers.get("Cookie") ?? "");
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet: { name: string; value: string; options: any }[]) {
           // Add Set-Cookie headers to the response headers
           cookiesToSet.forEach(({ name, value, options }) =>
             headers.append(
