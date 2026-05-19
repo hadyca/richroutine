@@ -118,7 +118,8 @@ export async function getUserWatchlist(
         name_ko,
         market,
         exchange,
-        last_price
+        last_price,
+        updated_at
       )
     `,
     )

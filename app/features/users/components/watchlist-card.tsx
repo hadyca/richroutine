@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useFetcher } from "react-router";
+import { DateTime } from "luxon";
 import { toast } from "sonner";
 
 import { Button } from "~/core/components/ui/button";
@@ -101,6 +102,15 @@ export function WatchlistCard({
   const totalProfitAmount = totalCurrentValue - totalPurchaseValue;
   const totalProfitPercent =
     totalPurchaseValue > 0 ? (totalProfitAmount / totalPurchaseValue) * 100 : 0;
+
+  const representativeUpdatedAt = watchlist.find(
+    (item) => item.tickers?.updated_at,
+  )?.tickers?.updated_at;
+  const formattedUpdatedAt = representativeUpdatedAt
+    ? DateTime.fromISO(representativeUpdatedAt, { zone: "utc" })
+        .setZone("Asia/Seoul")
+        .toFormat("yyyy.MM.dd HH:mm")
+    : null;
 
   const renderWatchlistItem = (item: any) => {
     const currentPrice = item.tickers?.last_price || 0;
@@ -406,7 +416,14 @@ export function WatchlistCard({
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">총 자산</CardTitle>
+          <CardTitle className="flex items-baseline gap-2">
+            <span>총 자산</span>
+            {formattedUpdatedAt && (
+              <span className="text-[11px] font-normal text-muted-foreground">
+                ({formattedUpdatedAt} 기준)
+              </span>
+            )}
+          </CardTitle>
           <Popover>
             <PopoverTrigger asChild>
               <CircleQuestionMark className="text-muted-foreground/50 hover:text-muted-foreground h-4 w-4 cursor-help transition-colors" />

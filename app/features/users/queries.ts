@@ -15,9 +15,11 @@ export async function getUserProfile(
     .select("*")
     .eq("profile_id", userId)
     .single();
+
   if (error) {
     throw error;
   }
+
   return data;
 }
 

@@ -23,7 +23,7 @@ import makeServerClient from "~/core/lib/supa-client.server";
 
 /**
  * Validation schema for email resend requests
- * 
+ *
  * This schema ensures that the submitted email address is valid before
  * attempting to resend the verification email. It uses Zod's email validator
  * with a custom error message for better user feedback.
@@ -34,7 +34,7 @@ const resendSchema = z.object({
 
 /**
  * Action handler for resending verification emails
- * 
+ *
  * This function processes requests to resend verification emails to users
  * during the signup process. It follows these steps:
  * 1. Extracts and validates the email from the form data
@@ -42,12 +42,12 @@ const resendSchema = z.object({
  * 3. Calls Supabase's resend API with the signup type
  * 4. Sets the redirect URL to the verification page
  * 5. Returns appropriate success or error responses
- * 
+ *
  * Security considerations:
  * - Validates email format to prevent malformed requests
  * - Uses server-side validation to prevent client-side bypass
  * - Returns generic error messages to prevent email enumeration
- * 
+ *
  * @param request - The incoming HTTP request with form data
  * @returns JSON response indicating success or error
  */

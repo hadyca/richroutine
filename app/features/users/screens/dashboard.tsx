@@ -14,14 +14,14 @@ import {
   addToWatchlist,
   removeFromWatchlist,
   toggleAiNews,
-  updateWatchlistItem,
   updateTickerPrice,
+  updateWatchlistItem,
 } from "~/features/news/mutations";
 import {
   getLatestEconomyIndices,
   getTickerMarketAndExchange,
-  getUserWatchlist,
   getUserPortfolioNews,
+  getUserWatchlist,
 } from "~/features/news/queries";
 import { PortfolioNewsCard } from "~/features/users/components/portfolio-news-card";
 import { StatCard } from "~/features/users/components/stat-card";
@@ -41,7 +41,6 @@ export async function loader({ request }: Route.LoaderArgs) {
     getUserWatchlist(client, userId),
     getUserPortfolioNews(client, userId),
   ]);
-
   return Response.json(
     {
       economyIndices,
@@ -185,7 +184,7 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
       </div>
 
       <div className="flex items-center gap-2 pt-4">
-        <TrendingUp className="h-5 w-5 text-primary" />
+        <TrendingUp className="text-primary h-5 w-5" />
         <h2 className="text-xl font-bold tracking-tight">시장 심리 지표</h2>
       </div>
       <div className="grid gap-6 md:grid-cols-2">
@@ -194,7 +193,7 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
         ))}
       </div>
       <div className="flex items-center gap-2 pt-8">
-        <Briefcase className="h-5 w-5 text-primary" />
+        <Briefcase className="text-primary h-5 w-5" />
         <h2 className="text-xl font-bold tracking-tight">포트폴리오</h2>
       </div>
       <div className="grid gap-6 md:grid-cols-3">
