@@ -1,7 +1,7 @@
 import type { Route } from "./+types/kr-stock-news";
 
-import * as Sentry from "@sentry/react-router";
 import { GoogleGenAI } from "@google/genai";
+import * as Sentry from "@sentry/react-router";
 import axios from "axios";
 import { data } from "react-router";
 import { z } from "zod";
@@ -94,8 +94,8 @@ export const action = async ({ request }: Route.ActionArgs) => {
       ...(jungsiRes.data?.items ?? []),
     ];
 
-    // 최근 24시간 이내 기사만 필터링 (pubDate: RFC 822 형식, KST 기준)
-    const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+    // 최근 12시간 이내 기사만 필터링 (pubDate: RFC 822 형식, KST 기준)
+    const oneDayAgo = Date.now() - 12 * 60 * 60 * 1000;
     const recent = combined.filter((item: any) => {
       const published = new Date(item.pubDate).getTime();
       return published >= oneDayAgo;
@@ -111,7 +111,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
     });
 
     if (deduped.length === 0) {
-      throw new Error("최근 24시간 이내 국내 증시 뉴스가 없습니다.");
+      throw new Error("최근 12시간 이내 국내 증시 뉴스가 없습니다.");
     }
 
     // HTML 태그 제거 및 정제

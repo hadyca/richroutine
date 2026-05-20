@@ -1,7 +1,7 @@
 import type { Route } from "./+types/us-stock-news";
 
-import * as Sentry from "@sentry/react-router";
 import { GoogleGenAI } from "@google/genai";
+import * as Sentry from "@sentry/react-router";
 import axios from "axios";
 import { data } from "react-router";
 import { z } from "zod";
@@ -60,9 +60,9 @@ export const action = async ({ request }: Route.ActionArgs) => {
 
     let newsData = response.data;
 
-    // Finnhub의 최신 뉴스 중 '최근 24시간 이내' 기사만 필터링합니다.
+    // Finnhub의 최신 뉴스 중 '최근 12시간 이내' 기사만 필터링합니다.
     if (Array.isArray(newsData)) {
-      const oneDayAgo = Math.floor(Date.now() / 1000) - 24 * 60 * 60; // 24시간 전 (초 단위)
+      const oneDayAgo = Math.floor(Date.now() / 1000) - 12 * 60 * 60; // 12시간 전 (초 단위)
       newsData = newsData.filter((n: any) => n.datetime >= oneDayAgo);
 
       // 당일 발행 뉴스가 100개가 넘을 경우 최신순(앞부분) 100개로 자릅니다.
