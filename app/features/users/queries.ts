@@ -28,6 +28,7 @@ export const getLoggedInUserId = async (client: SupabaseClient<Database>) => {
   if (error || data.user === null) {
     throw redirect("/login");
   }
+
   return data.user.id;
 };
 
