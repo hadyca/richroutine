@@ -107,7 +107,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: "description",
       content:
-        "AI가 요약한 국내 및 미국 증시 뉴스를 매일 아침 받아보세요. VIX, VKOSPI 등 시장 변동성 지표와 맞춤형 투자 인사이트를 한눈에 확인하세요.",
+        "AI가 요약한 국내 및 미국 증시 뉴스를 매일 아침 받아보세요. 시장 변동성 지표와 맞춤형 투자 인사이트를 한눈에 확인하세요.",
     },
   ];
 };
@@ -311,8 +311,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               className="text-muted-foreground mt-4"
               viewport={{ amount: 0.8 }}
             >
-              매일 시장 심리 지표를 확인하고, 감정이 아닌 객관적인 데이터로 최적의 매수·매도
-              타이밍을 잡아보세요.
+              매일 시장 심리 지표를 확인하고, 감정이 아닌 객관적인 데이터로
+              최적의 매수·매도 타이밍을 잡아보세요.
             </TextAnimate>
           </div>
           <div className="col-span-1 flex items-center justify-center md:col-span-2 md:justify-end md:pl-10">
