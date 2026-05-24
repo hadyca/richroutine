@@ -119,6 +119,10 @@ export function WatchlistCard({
     const profitAmount = currentValue - purchaseValue;
     const profitPercent =
       purchaseValue > 0 ? (profitAmount / purchaseValue) * 100 : 0;
+    const breakEvenPercent =
+      profitAmount < 0 && currentPrice > 0
+        ? ((item.avg_price - currentPrice) / currentPrice) * 100
+        : 0;
 
     return (
       <TableRow
@@ -186,6 +190,11 @@ export function WatchlistCard({
               })}
               ({Math.abs(profitPercent).toFixed(2)}%)
             </span>
+            {profitAmount < 0 && breakEvenPercent > 0 && (
+              <span className="text-[9px] font-normal text-slate-400 dark:text-slate-500 tabular-nums">
+                본전까지 +{breakEvenPercent.toFixed(2)}%
+              </span>
+            )}
           </div>
         </TableCell>
         <TableCell className="w-10 py-3 text-right">
