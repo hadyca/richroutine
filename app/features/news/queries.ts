@@ -180,7 +180,8 @@ export async function getWatchlistsGroupedByProfile(
   const { data, error } = await client
     .from("watchlists")
     .select("profile_id, ticker, tickers!inner(market)")
-    .eq("tickers.market", market);
+    .eq("tickers.market", market)
+    .eq("is_ai_news_subscribed", true);
 
   if (error) {
     throw error;
