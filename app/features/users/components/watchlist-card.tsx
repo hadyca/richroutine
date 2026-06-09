@@ -495,7 +495,7 @@ export function WatchlistCard({
               </Button>
             </DialogTrigger>
             <DialogContent
-              className={`top-[10%] translate-y-0 p-0 sm:max-w-md ${step === "detail" ? "bg-slate-50 dark:bg-slate-950" : ""}`}
+              className={`top-[10%] translate-y-0 p-0 sm:max-w-md max-h-[80vh] sm:max-h-[85vh] overflow-y-auto ${step === "detail" ? "bg-slate-50 dark:bg-slate-950" : ""}`}
               showCloseButton={step === "detail"}
             >
               {step === "search" ? (
@@ -573,13 +573,13 @@ export function WatchlistCard({
               ) : (
                 <div className="flex flex-col">
                   {/* Ticker Info Header */}
-                  <div className="bg-white p-6 pb-4 dark:bg-slate-900">
+                  <div className="bg-white p-4 pb-3 sm:p-6 sm:pb-4 dark:bg-slate-900">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
-                        <span className="text-xl font-bold">
+                        <span className="text-lg sm:text-xl font-bold">
                           {selectedTicker?.name_ko || selectedTicker?.name_en}
                         </span>
-                        <span className="text-muted-foreground text-sm font-medium">
+                        <span className="text-muted-foreground text-xs sm:text-sm font-medium">
                           {selectedTicker?.ticker} ·{" "}
                           {selectedTicker?.market === "US" ? "NASDAQ" : "KOSPI"}
                         </span>
@@ -588,9 +588,9 @@ export function WatchlistCard({
                   </div>
 
                   {/* Input Displays */}
-                  <div className="grid grid-cols-2 gap-4 px-6 py-2">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 px-4 py-2 sm:px-6 sm:py-2">
                     <div
-                      className={`cursor-pointer rounded-xl border-2 p-3 transition-all ${
+                      className={`cursor-pointer rounded-xl border-2 p-2.5 sm:p-3 transition-all ${
                         activeInput === "quantity"
                           ? "border-primary bg-primary/5 dark:bg-primary/20 ring-primary/20 shadow-sm ring-1"
                           : "border-transparent bg-white dark:bg-slate-900"
@@ -600,11 +600,11 @@ export function WatchlistCard({
                         setActiveInput("quantity");
                       }}
                     >
-                      <span className="text-muted-foreground block text-[10px] font-bold tracking-wider uppercase">
+                      <span className="text-muted-foreground block text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">
                         보유 수량
                       </span>
                       <div className="flex items-baseline justify-end gap-1 overflow-hidden">
-                        <span className="truncate text-lg font-bold tabular-nums">
+                        <span className="truncate text-base sm:text-lg font-bold tabular-nums">
                           {quantityValue || "0"}
                         </span>
                         <span className="text-xs font-medium text-slate-400">
@@ -614,7 +614,7 @@ export function WatchlistCard({
                     </div>
 
                     <div
-                      className={`cursor-pointer rounded-xl border-2 p-3 transition-all ${
+                      className={`cursor-pointer rounded-xl border-2 p-2.5 sm:p-3 transition-all ${
                         activeInput === "price"
                           ? "border-primary bg-primary/5 dark:bg-primary/20 ring-primary/20 shadow-sm ring-1"
                           : "border-transparent bg-white dark:bg-slate-900"
@@ -624,14 +624,14 @@ export function WatchlistCard({
                         setActiveInput("price");
                       }}
                     >
-                      <span className="text-muted-foreground block text-[10px] font-bold tracking-wider uppercase">
+                      <span className="text-muted-foreground block text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">
                         평균 매수가
                       </span>
                       <div className="flex items-baseline justify-end gap-1 overflow-hidden">
                         <span className="text-xs font-medium text-slate-400">
                           {selectedTicker?.market === "US" ? "$" : "₩"}
                         </span>
-                        <span className="truncate text-lg font-bold tabular-nums">
+                        <span className="truncate text-base sm:text-lg font-bold tabular-nums">
                           {priceValue || "0"}
                         </span>
                       </div>
@@ -639,7 +639,7 @@ export function WatchlistCard({
                   </div>
 
                   {/* Calculator Keypad */}
-                  <div className="grid grid-cols-3 gap-1 p-4 pb-6">
+                  <div className="grid grid-cols-3 gap-1 p-3 pb-4 sm:p-4 sm:pb-6">
                     {[
                       "1",
                       "2",
@@ -657,7 +657,7 @@ export function WatchlistCard({
                       <Button
                         key={key}
                         variant="ghost"
-                        className="h-14 text-lg font-semibold hover:bg-slate-200 dark:hover:bg-slate-800"
+                        className="h-11 sm:h-14 text-base sm:text-lg font-semibold hover:bg-slate-200 dark:hover:bg-slate-800"
                         onClick={() => handleKeypadPress(key)}
                       >
                         {key === "back" ? <Delete className="size-5" /> : key}
@@ -666,9 +666,9 @@ export function WatchlistCard({
                   </div>
 
                   {/* Footer Action */}
-                  <div className="p-6 pt-0">
+                  <div className="p-4 pt-0 sm:p-6 sm:pt-0">
                     <Button
-                      className="w-full py-6 text-base font-bold shadow-lg"
+                      className="w-full h-12 sm:h-14 text-sm sm:text-base font-bold shadow-lg"
                       disabled={
                         isAdding ||
                         !quantityValue ||
