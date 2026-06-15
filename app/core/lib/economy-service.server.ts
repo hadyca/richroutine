@@ -67,6 +67,126 @@ async function getKisAccessToken() {
 }
 
 /**
+ * Threads 액세스 토큰 가져오기 (캐싱 및 만료 전 자동 연장 포함)
+ */
+export async function getThreadsAccessToken() {
+  const now = new Date();
+
+  // 1. DB에서 기존 Threads 토큰 조회
+  const existingToken = await getProviderToken(adminClient, "THREADS");
+
+  // 2. 토큰이 아예 없는 경우
+  if (!existingToken) {
+    throw new Error(
+      "Threads 토큰이 DB에 존재하지 않습니다. 먼저 초기 토큰을 등록해 주세요.",
+    );
+  }
+
+  const expiresAt = existingToken.expires_at
+    ? new Date(existingToken.expires_at)
+    : null;
+
+  // 3. 토큰이 존재하지만 이미 만료된 경우 (갱신 불가능하므로 재로그인 필요)
+  if (expiresAt && now >= expiresAt) {
+    throw new Error(
+      "Threads 토큰이 만료되었습니다. 새로운 단기 토큰을 발급받아 재등록해야 합니다.",
+    );
+  }
+
+  // 4. 만료 기간이 넉넉히 남아있는 경우 (예: 10일 이상 남음) -> 기존 토큰 반환
+  // Threads 장기 토큰은 보통 60일 유효하며 만료 10일 전에 자동으로 갱신하도록 설계합니다.
+  const tenDaysInMs = 10 * 24 * 60 * 60 * 1000;
+  if (expiresAt && expiresAt.getTime() - now.getTime() > tenDaysInMs) {
+    return existingToken.access_token;
+  }
+
+  // 5. 만료 기간이 임박한 경우 (10일 이내) -> API를 호출하여 토큰 자동 갱신
+  let retries = 3;
+  let lastError: Error | null = null;
+
+  while (retries > 0) {
+    try {
+      const response = await axios.get(
+        "https://graph.threads.net/refresh_access_token",
+        {
+          params: {
+            grant_type: "th_refresh_token",
+            access_token: existingToken.access_token,
+          },
+        },
+      );
+
+      const { access_token, expires_in } = response.data;
+
+      // 새 만료 날짜 계산 (현재 시간 + expires_in 초)
+      const expiredDate = new Date(now.getTime() + expires_in * 1000);
+
+      // DB에 토큰 정보 Upsert (저장/갱신)
+      await upsertProviderToken(
+        adminClient,
+        "THREADS",
+        access_token,
+        expiredDate,
+      );
+
+      console.log(
+        `✅ Threads 토큰 자동 갱신 성공 (만료일: ${expiredDate.toISOString()})`,
+      );
+      return access_token;
+    } catch (error) {
+      retries--;
+      lastError = error instanceof Error ? error : new Error(String(error));
+      if (retries === 0) {
+        throw new Error(`Threads 토큰 갱신 실패: ${lastError.message}`);
+      }
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+
+  throw lastError || new Error("알 수 없는 Threads 토큰 갱신 에러");
+}
+
+/**
+ * 최초로 발급받은 Threads 단기 토큰(Short-Lived)을 장기 토큰(Long-Lived)으로 교환하여 DB에 저장
+ */
+export async function exchangeAndSaveThreadsToken(shortLivedToken: string) {
+  const appSecret = process.env.THREADS_APP_SECRET;
+
+  if (!appSecret) {
+    throw new Error("THREADS_APP_SECRET 환경변수가 설정되지 않았습니다.");
+  }
+
+  try {
+    console.log("시작!");
+    const response = await axios.get("https://graph.threads.net/access_token", {
+      params: {
+        grant_type: "th_exchange_token",
+        client_secret: appSecret,
+        access_token: shortLivedToken,
+      },
+    });
+    console.log("끝!");
+
+    const { access_token, expires_in } = response.data;
+    const expiredDate = new Date(Date.now() + expires_in * 1000);
+
+    await upsertProviderToken(
+      adminClient,
+      "THREADS",
+      access_token,
+      expiredDate,
+    );
+    console.log(
+      `✅ Threads 장기 토큰 등록 성공 (만료: ${expiredDate.toISOString()})`,
+    );
+    // return access_token;
+  } catch (error: any) {
+    console.error("Threads 장기 토큰 교환 실패:", error.message);
+    throw error;
+  }
+}
+
+/**
  * 1. VIX 지수 조회 (Yahoo Finance)
  */
 export async function fetchVix() {
@@ -157,4 +277,55 @@ export async function fetchKRStockPrice(ticker: string) {
   return {
     current_price: Number(data.output.stck_prpr),
   };
+}
+
+/**
+ * Threads에 텍스트 포스트 게시하기
+ */
+export async function postTextToThreads(text: string) {
+  const token = await getThreadsAccessToken();
+
+  try {
+    // 1. Threads 미디어 컨테이너 생성 (TEXT 타입)
+    const containerResponse = await axios.post(
+      "https://graph.threads.net/v1.0/me/threads",
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          media_type: "TEXT",
+          text: text,
+        },
+      },
+    );
+
+    const creationId = containerResponse.data.id;
+    if (!creationId) {
+      throw new Error("Threads 미디어 컨테이너 생성 실패 (ID가 없습니다.)");
+    }
+
+    // 2. 생성된 컨테이너 퍼블리싱 (게시)
+    const publishResponse = await axios.post(
+      "https://graph.threads.net/v1.0/me/threads_publish",
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          creation_id: creationId,
+        },
+      },
+    );
+
+    const postId = publishResponse.data.id;
+    console.log(`✅ Threads 포스팅 성공! Post ID: ${postId}`);
+    return postId;
+  } catch (error: any) {
+    const errorData = error.response?.data || error.message;
+    console.error("❌ Threads 포스팅 실패:", errorData);
+    throw new Error(`Threads 포스팅 실패: ${JSON.stringify(errorData)}`);
+  }
 }

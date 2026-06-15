@@ -61,6 +61,7 @@ export default [
         "features/cron/api/update-market-indices.tsx",
       ),
       route("/get-portfolio-news", "features/cron/api/get-portfolio-news.tsx"),
+      route("/post-to-threads", "features/cron/api/post-to-threads.tsx"),
     ]),
     route("/news/search", "features/news/api/search-tickers.ts"),
   ]),
