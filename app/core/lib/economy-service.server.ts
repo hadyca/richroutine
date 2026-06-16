@@ -282,29 +282,40 @@ export async function fetchKRStockPrice(ticker: string) {
 /**
  * Threads에 텍스트 포스트 게시하기
  */
+async function createThreadsContainer(
+  token: string,
+  text: string,
+  replyToId?: string,
+) {
+  const containerResponse = await axios.post(
+    "https://graph.threads.net/v1.0/me/threads",
+    null,
+
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        media_type: "TEXT",
+        text: text,
+        ...(replyToId && { reply_to_id: replyToId }),
+      },
+    },
+  );
+
+  const creationId = containerResponse.data.id;
+  if (!creationId) {
+    throw new Error("Threads 미디어 컨테이너 생성 실패 (ID가 없습니다.)");
+  }
+  return creationId;
+}
+
 export async function postTextToThreads(text: string) {
   const token = await getThreadsAccessToken();
 
   try {
     // 1. Threads 미디어 컨테이너 생성 (TEXT 타입)
-    const containerResponse = await axios.post(
-      "https://graph.threads.net/v1.0/me/threads",
-      null,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          media_type: "TEXT",
-          text: text,
-        },
-      },
-    );
-
-    const creationId = containerResponse.data.id;
-    if (!creationId) {
-      throw new Error("Threads 미디어 컨테이너 생성 실패 (ID가 없습니다.)");
-    }
+    const creationId = await createThreadsContainer(token, text);
 
     // 2. 생성된 컨테이너 퍼블리싱 (게시)
     const publishResponse = await axios.post(
@@ -327,5 +338,53 @@ export async function postTextToThreads(text: string) {
     const errorData = error.response?.data || error.message;
     console.error("❌ Threads 포스팅 실패:", errorData);
     throw new Error(`Threads 포스팅 실패: ${JSON.stringify(errorData)}`);
+  }
+}
+
+export async function postReplyToThreads(text: string, replyToId: string) {
+  const token = await getThreadsAccessToken();
+  const MAX_RETRIES = 3;
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      // 1. Threads 미디어 컨테이너 생성 (TEXT 타입)
+      const creationId = await createThreadsContainer(token, text, replyToId);
+
+      // 2. 컨테이너 퍼블리시 전 잠시 대기 (서버 인덱싱 시간 확보)
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      // 3. 생성된 컨테이너 퍼블리싱 (게시)
+      const publishResponse = await axios.post(
+        "https://graph.threads.net/v1.0/me/threads_publish",
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            creation_id: creationId,
+          },
+        },
+      );
+
+      const postId = publishResponse.data.id;
+      console.log(`✅ Threads 댓글 성공! Post ID: ${postId}`);
+      return postId;
+    } catch (error: any) {
+      const errorData = error.response?.data || error.message;
+      const isMediaNotFound = error.response?.data?.error?.error_subcode === 4279009;
+
+      if (isMediaNotFound && attempt < MAX_RETRIES) {
+        const waitMs = attempt * 5000; // 5초, 10초, 15초 점진적 대기
+        console.log(
+          `⏳ 댓글 퍼블리시 실패 (시도 ${attempt}/${MAX_RETRIES}), ${waitMs / 1000}초 후 재시도...`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, waitMs));
+        continue;
+      }
+
+      console.error("❌ Threads 댓글 실패:", errorData);
+      throw new Error(`Threads 댓글 실패: ${JSON.stringify(errorData)}`);
+    }
   }
 }
