@@ -286,6 +286,7 @@ async function createThreadsContainer(
   token: string,
   text: string,
   replyToId?: string,
+  topicTag?: string,
 ) {
   const containerResponse = await axios.post(
     "https://graph.threads.net/v1.0/me/threads",
@@ -299,6 +300,7 @@ async function createThreadsContainer(
         media_type: "TEXT",
         text: text,
         ...(replyToId && { reply_to_id: replyToId }),
+        ...(topicTag && { topic_tag: topicTag }),
       },
     },
   );
@@ -315,7 +317,7 @@ export async function postTextToThreads(text: string) {
 
   try {
     // 1. Threads 미디어 컨테이너 생성 (TEXT 타입)
-    const creationId = await createThreadsContainer(token, text);
+    const creationId = await createThreadsContainer(token, text, undefined, "주식");
 
     // 2. 생성된 컨테이너 퍼블리싱 (게시)
     const publishResponse = await axios.post(
