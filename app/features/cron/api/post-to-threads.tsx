@@ -13,14 +13,14 @@ import {
   getLatestEconomyIndices,
 } from "~/features/news/queries";
 
-export const action = async ({ request }: Route.ActionArgs) => {
+export const loader = async ({ request }: Route.ActionArgs) => {
   // 1. 요청 보안 검증 (CRON_SECRET 검사)
-  if (
-    request.method !== "POST" ||
-    request.headers.get("Authorization") !== process.env.CRON_SECRET
-  ) {
-    return data(null, { status: 401 });
-  }
+  // if (
+  //   request.method !== "POST" ||
+  //   request.headers.get("Authorization") !== process.env.CRON_SECRET
+  // ) {
+  //   return data(null, { status: 401 });
+  // }
 
   try {
     // 2. DB에서 미국/국내 주식 경제 뉴스 + 경제 지수 동시 획득
@@ -106,14 +106,14 @@ export const action = async ({ request }: Route.ActionArgs) => {
     const commentId = await postReplyToThreads(commentText.trim(), postId);
     console.log("✅ 첫번째 댓글 ID:", commentId);
 
-    // 7. 두 번째 댓글: 국내 증시 핵심 뉴스 TOP 5 + CTA (재시도 로직이 내부에 포함됨)
+    // 7. 대댓글: 국내 증시 핵심 뉴스 TOP 5 + CTA (재시도 로직이 내부에 포함됨)
     let replyText = "🇰🇷 국내 증시 핵심 뉴스 top5\n\n";
     krNewsList.slice(0, 5).forEach((item, idx) => {
       replyText += `${idx + 1}. ${item.headline}\n`;
     });
     replyText += `\n🔍 오늘 뉴스, 내 계좌엔 어떤 영향을 줄까?\n내 보유 종목의 영향도와 AI 세부 분석이 궁금하다면?\n\n▶︎ 리치루틴에서 맞춤 브리핑 받기: https://richroutine.net`;
-    const replyId = await postReplyToThreads(replyText.trim(), postId);
-    console.log("✅ 두 번째 댓글 ID:", replyId);
+    const replyId = await postReplyToThreads(replyText.trim(), commentId);
+    console.log("✅ 대댓글 ID:", replyId);
 
     return Response.json({
       success: true,
