@@ -79,7 +79,12 @@ export const action = async ({ request }: Route.ActionArgs) => {
 
     // 4. Threads 포스트 내용 빌드 (500자 이내 준수)
     const today = new Date();
-    const dateStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+    const dateStr = today.toLocaleDateString("ko-KR", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 
     const postText = `[${dateStr}]
 출근길 30초 컷, 오늘 아침 주식 시장 심리&뉴스 요약
@@ -99,16 +104,16 @@ export const action = async ({ request }: Route.ActionArgs) => {
       commentText += `${idx + 1}. ${item.headline}\n`;
     });
     const commentId = await postReplyToThreads(commentText.trim(), postId);
-    console.log("✅ 댓글 ID:", commentId);
+    console.log("✅ 첫번째 댓글 ID:", commentId);
 
-    // 7. 대댓글: 국내 증시 핵심 뉴스 TOP 5 + CTA (재시도 로직이 내부에 포함됨)
+    // 7. 두 번째 댓글: 국내 증시 핵심 뉴스 TOP 5 + CTA (재시도 로직이 내부에 포함됨)
     let replyText = "🇰🇷 국내 증시 핵심 뉴스 top5\n\n";
     krNewsList.slice(0, 5).forEach((item, idx) => {
       replyText += `${idx + 1}. ${item.headline}\n`;
     });
     replyText += `\n🔍 오늘 뉴스, 내 계좌엔 어떤 영향을 줄까?\n내 보유 종목의 영향도와 AI 세부 분석이 궁금하다면?\n\n▶︎ 리치루틴에서 맞춤 브리핑 받기: https://richroutine.net`;
-    const replyId = await postReplyToThreads(replyText.trim(), commentId);
-    console.log("✅ 대댓글 ID:", replyId);
+    const replyId = await postReplyToThreads(replyText.trim(), postId);
+    console.log("✅ 두 번째 댓글 ID:", replyId);
 
     return Response.json({
       success: true,
