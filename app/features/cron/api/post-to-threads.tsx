@@ -13,14 +13,14 @@ import {
   getLatestEconomyIndices,
 } from "~/features/news/queries";
 
-export const loader = async ({ request }: Route.ActionArgs) => {
+export const action = async ({ request }: Route.ActionArgs) => {
   // 1. 요청 보안 검증 (CRON_SECRET 검사)
-  // if (
-  //   request.method !== "POST" ||
-  //   request.headers.get("Authorization") !== process.env.CRON_SECRET
-  // ) {
-  //   return data(null, { status: 401 });
-  // }
+  if (
+    request.method !== "POST" ||
+    request.headers.get("Authorization") !== process.env.CRON_SECRET
+  ) {
+    return data(null, { status: 401 });
+  }
 
   try {
     // 2. DB에서 미국/국내 주식 경제 뉴스 + 경제 지수 동시 획득
