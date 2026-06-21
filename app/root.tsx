@@ -130,7 +130,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const data = useRouteLoaderData("root");
   return (
     <ThemeProvider
-      specifiedTheme={data?.theme ?? "dark"} // Default to dark theme if none is specified
+      specifiedTheme={data?.theme ?? "light"} // Default to light theme if none is specified
       themeAction="/api/settings/theme" // API endpoint for changing theme
     >
       <InnerLayout>{children}</InnerLayout>
@@ -182,7 +182,10 @@ function InnerLayout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="naver-site-verification" content="ad880f796dc5c46de770ed86ecacb5a59ca94e63" />
+        <meta
+          name="naver-site-verification"
+          content="ad880f796dc5c46de770ed86ecacb5a59ca94e63"
+        />
         <Meta />
         <Links />
         {isPreRendered ? (
